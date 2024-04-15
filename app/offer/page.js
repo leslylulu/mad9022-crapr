@@ -9,15 +9,15 @@ export default async function Page() {
   // let token = await getSession();
 
   return (
-    <main className="flex min-h-screen flex-col items-start justify-start py-24">
+    <main className="flex min-h-screen flex-col items-center py-12">
       <header className="flex items-center flex-col">
         <h1 className="text-4xl font-bold">Crapr</h1>
         <p className="text-xl">Get rid of your crap now</p>
-        <NavBar token={{ value: "default" }} />
+        <NavBar />
       </header>
       <div className="w-full mt-6 px-12">
         <h2 className="text-center">Upload a post of your own crap here.</h2>
-        <form className="flex flex-col gap-3 items-center">
+        {/* <form className="flex flex-col gap-3 items-start">
           <label className="flex items-center">
             <span className="w-52">Title:</span>
             <input
@@ -42,8 +42,8 @@ export default async function Page() {
               <input id="dropzone-file" type="file" class="hidden" />
             </label>
           </div>
-          <input type="submit" value="Submit" className="cursor-pointer focus:outline-none text-white bg-primary-dark hover:bg-primary focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" />
-        </form>
+          <input type="submit" value="Submit" className="cursor-pointer focus:outline-none text-white bg-primary-dark hover:bg-primary focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-primary-dark dark:hover:bg-green-700 dark:focus:ring-green-800" />
+        </form> */}
       </div>
     </main>
   );

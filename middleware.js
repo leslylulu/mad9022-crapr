@@ -12,11 +12,21 @@ export async function middleware(request) {
       response = NextResponse.next(); //the response object that will contain layout.js and page.js
     }
     if (request.nextUrl.searchParams.has('token')) {
-      await login(response, request.nextUrl.searchParams.get('token')); //function from actions.js
-      // TODO: redirect to the home page without the token in the URL
+
+      const newResponse = await login(request.nextUrl.searchParams.get('token'), request.nextUrl); //function from actions.js
+      return newResponse;
     }
     return response;
   }
+  // if (request.nextUrl.pathname.startWith('/crap')) {
+  //   if (!response) {
+  //     response = NextResponse.next(); //the response object that will contain layout.js and page.js
+  //   }
+  //   if (!request.cookies.has('token')) {
+  //     return NextResponse.redirect(request.nextUrl.origin);
+  //   }
+  //   return response;
+  // }
 }
 
 export const config = {

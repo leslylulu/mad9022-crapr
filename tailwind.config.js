@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -15,6 +17,7 @@ module.exports = {
       secondary: {
         DEFAULT: "#FBFADA",
       },
+      ...colors,
       white: "#fff",
       black: "#000",
       transparent: "transparent",

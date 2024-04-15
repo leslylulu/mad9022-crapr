@@ -5,17 +5,29 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export async function login(response, token) {
+export async function handelLogin(formData) {
+	'use server'
+	const { NEXT_API_URL } = process.env;
+	const redir = encodeURIComponent('http://localhost:3000/');
+	const url = `${NEXT_API_URL}/auth/google?redirect_url=${redir}`;
+	redirect(url);
+}
+
+
+export async function login(token, url) {
 	//set the cookie
-	console.log('token =', token);
-	const expires = new Date(Date.now() + 60 * 60 * 12); //60 seconds x 60 x 12 expiry for the token cookie
-	await response.cookies.set('token', token, {
+	console.log('LOGIN SET', token);
+	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds expiry for the token cookie
+	const newResponse = NextResponse.redirect(new URL('/', url).toString());
+	newResponse.cookies.set('token', token, {
 		path: '/',
 		secure: process.env.NODE_ENV === 'production',
 		httpOnly: true,
 		expires: expires,
 	});
+	return newResponse;
 }
+
 
 export async function logout() {
 	//clear the cookie
@@ -26,7 +38,7 @@ export async function logout() {
 export async function getSession() {
 	//get the cookie
 	const token = await cookies().get('token'); //token object
-	// console.log('getSession -', token?.value, token?.value ? 'has cookie token' : 'no cookie token');
+	console.log('getSession token', token?.value);
 	if (!token) return null;
 	revalidatePath('/');
 	return token;
@@ -40,7 +52,7 @@ export async function updateSession(request) {
 		console.log('updateSession - no token cookie');
 	}
 	if (!token) return;
-
+	console.log('updateSession has token',);
 	// Refresh the session cookie so it doesn't expire
 	const resp = NextResponse.next();
 	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds
@@ -51,4 +63,12 @@ export async function updateSession(request) {
 		expires: expires,
 	});
 	return resp;
+}
+
+export async function handleSearch(formData) {
+	'use server'
+	console.log('handleSearch -', formData);
+	const keyword = formData.get('keyword');
+	const distance = formData.get('distance');
+	redirect(`/crap?distance=${encodeURIComponent(distance)}${keyword ? '&keyword=' + encodeURIComponent(keyword) : ''} `);
 }
