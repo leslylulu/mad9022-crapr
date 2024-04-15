@@ -4,10 +4,11 @@ import { getSession } from '@/app/actions';
 const { NEXT_API_URL } = process.env;
 
 export async function GET(request) {
+	'use server'
 	// TODO: this is not working
 	const cookieStore = cookies()
-	// const token = cookieStore.get('token')?.value;
-	const token = await getSession();
+	const token = cookieStore.get('token')?.value;
+	// const token = await getSession();
 
 	console.log('token 444 ==', token);
 	if (!token) {

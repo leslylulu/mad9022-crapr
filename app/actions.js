@@ -21,8 +21,8 @@ export async function login(token, url) {
 	const newResponse = NextResponse.redirect(new URL('/', url).toString());
 	newResponse.cookies.set('token', token, {
 		path: '/',
-		secure: process.env.NODE_ENV === 'production',
-		httpOnly: true,
+		// secure: process.env.NODE_ENV === 'production',
+		// httpOnly: true,
 		expires: expires,
 	});
 	return newResponse;
