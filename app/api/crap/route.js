@@ -1,15 +1,14 @@
-import { cookies } from 'next/headers';
+// import { cookies } from 'next/headers';
 import { getSession } from '@/app/actions';
 
 const { NEXT_API_URL } = process.env;
 
 export async function GET(request) {
-	'use server'
 	// TODO: this is not working
-	const cookieStore = cookies()
-	const token = cookieStore.get('token')?.value;
-	// const token = await getSession();
-
+	const token = await getSession();
+	// const cookieStore = cookies();
+	// const token = cookieStore.get('token')?.value;
+	// const apple = cookieStore.get('apple');
 	console.log('token 444 ==', token);
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
@@ -24,7 +23,7 @@ export async function GET(request) {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
-			authorization: 'Bearer ' + token?.value,
+			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
 	});
@@ -40,6 +39,7 @@ export async function GET(request) {
 			'content-type': 'application/json',
 			'access-control-allow-methods': 'GET,HEAD',
 			'access-control-allow-origin': '*',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 		},
 		status: 200,
 	});

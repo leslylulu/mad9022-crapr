@@ -4,41 +4,50 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+const { NEXT_PAGE_URL } = process.env;
 
-export async function handelLogin(formData) {
+export async function handelLogin() {
 	'use server'
 	const { NEXT_API_URL } = process.env;
-	const redir = encodeURIComponent('http://localhost:3000/');
-	const url = `${NEXT_API_URL}/auth/google?redirect_url=${redir}`;
+	const redirectUrl = encodeURIComponent('http://localhost:3000/login');
+	const url = `${NEXT_API_URL}/auth/google?redirect_url=${redirectUrl}`;
 	redirect(url);
 }
 
+export async function createCrap(fd) {
+	'use server'
+	const title = fd.get('title');
+	const description = fd.get('description');
+	const file = fd.get('images');
+	console.log('fd =', title, description, file);
+	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
+		method: 'POST',
+		body: fd,
+	});
+}
 
-export async function login(token, url) {
+export async function login(response, token) {
 	//set the cookie
-	console.log('LOGIN SET', token);
 	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds expiry for the token cookie
-	const newResponse = NextResponse.redirect(new URL('/', url).toString());
-	newResponse.cookies.set('token', token, {
+	await response.cookies.set('token', token, {
 		path: '/',
 		// secure: process.env.NODE_ENV === 'production',
-		// httpOnly: true,
+		httpOnly: false,
 		expires: expires,
 	});
-	return newResponse;
 }
 
 
 export async function logout() {
 	//clear the cookie
-	await cookies().delete('token');
+	// await cookies().delete('token');
 	// await cookies().set('token', '', { expires: new Date(0) });
 }
 
 export async function getSession() {
 	//get the cookie
 	const token = await cookies().get('token'); //token object
-	console.log('getSession token', token?.value);
+	console.log('getSession -', token?.value, token?.value ? 'has cookie token' : 'no cookie token');
 	if (!token) return null;
 	revalidatePath('/');
 	return token;
@@ -54,17 +63,17 @@ export async function updateSession(request) {
 	if (!token) return;
 	console.log('updateSession has token',);
 	// Refresh the session cookie so it doesn't expire
-	const resp = NextResponse.next();
 	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds
-	resp.cookies.set({
-		name: 'token',
-		value: token,
-		httpOnly: true,
+	const resp = NextResponse.next();
+	resp.cookies.set('token', token, {
+		path: '/',
+		httpOnly: false,
 		expires: expires,
 	});
 	return resp;
 }
 
+// home page redirect to crap page
 export async function handleSearch(formData) {
 	'use server'
 	console.log('handleSearch -', formData);

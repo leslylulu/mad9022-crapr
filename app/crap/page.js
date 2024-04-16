@@ -1,5 +1,5 @@
 // export const revalidate = false; // means cache forever
-export const revalidate = 0; // don't cache
+// export const revalidate = 0; // don't cache
 // export const revalidate = 60 * 10; // means cache for 10 mins
 
 import NavBar from '@/app/components/navbar';
@@ -11,7 +11,6 @@ export default async function Page({ params, searchParams }) {
 	const token = await getSession();
 	console.log('page token =', token);
 	const response = await fetch(`${NEXT_PAGE_URL}/api/crap?distance=${distance}${keyword ? '&keyword=' + keyword : ''}`);
-	// console.log('response =', response);
 
 	return (
 		<main className="flex min-h-screen flex-col items-center py-12">

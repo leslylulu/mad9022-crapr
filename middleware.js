@@ -7,28 +7,37 @@ export async function middleware(request) {
   let response = await updateSession(request);
   //updateSession function in actions
 
-  if (request.nextUrl.pathname === '/') {
+  if (request.nextUrl.pathname === '/login') {
+    //what do you want to do on the home page
     if (!response) {
       response = NextResponse.next(); //the response object that will contain layout.js and page.js
     }
     if (request.nextUrl.searchParams.has('token')) {
-
-      const newResponse = await login(request.nextUrl.searchParams.get('token'), request.nextUrl); //function from actions.js
-      return newResponse;
+      //finish the login process by saving the token from the querystring as a cookie
+      // console.log('SET TOKEN', request.nextUrl.searchParams.get('token'));
+      await login(response, request.nextUrl.searchParams.get('token')); //function from actions.js
     }
     return response;
   }
-  // if (request.nextUrl.pathname.startWith('/crap')) {
-  //   if (!response) {
-  //     response = NextResponse.next(); //the response object that will contain layout.js and page.js
-  //   }
-  //   if (!request.cookies.has('token')) {
-  //     return NextResponse.redirect(request.nextUrl.origin);
-  //   }
-  //   return response;
-  // }
+  if (request.nextUrl.pathname === '/') {
+    //what do you want to do on the home page
+    if (!response) {
+      response = NextResponse.next(); //the response object that will contain layout.js and page.js
+    }
+    return response;
+  }
+  // return response;
+  if (request.nextUrl.pathname.startsWith('/crap')) {
+    if (!response) {
+      response = NextResponse.next(); //the response object that will contain layout.js and page.js
+    }
+    if (!request.cookies.has('token')) {
+      return NextResponse.redirect(request.nextUrl.origin);
+    }
+    return response;
+  }
 }
 
 export const config = {
-  matcher: ['/'],
+  matcher: ['/', '/login', '/crap'],
 };

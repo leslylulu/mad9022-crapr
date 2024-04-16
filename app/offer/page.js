@@ -3,7 +3,7 @@
 // export const revalidate = 60 * 10; // means cache for 10 mins
 
 import NavBar from '@/app/components/navbar';
-// import { getSession } from '@/app/actions';
+import { createCrap } from '@/app/actions';
 
 export default async function Page() {
   // let token = await getSession();
@@ -16,35 +16,32 @@ export default async function Page() {
         <NavBar />
       </header>
       <div className="w-full mt-6 px-12">
-        <h2 className="text-center">Upload a post of your own crap here.</h2>
-        {/* <form className="flex flex-col gap-3 items-start">
-          <label className="flex items-center">
-            <span className="w-52">Title:</span>
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-black focus:ring-blue-500 focus:border-blue-500"
-              type="text" name="title" placeholder='title' />
-          </label>
-          <label className="flex items-center">
-            <span className="w-52">Description:</span>
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-black focus:ring-blue-500 focus:border-blue-500"
-              type="text" name="description" placeholder='description' />
-          </label>
-          <div class="flex items-center justify-center w-full">
-            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-              <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                </svg>
-                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 4M)</p>
-              </div>
-              <input id="dropzone-file" type="file" class="hidden" />
-            </label>
+        <h2 className="text-center my-3 text-lg">Upload a post of your own crap here.</h2>
+
+        <form className="max-w-lg mx-auto" action={createCrap}>
+          <div className="mb-5">
+            <label className="block mb-2 text-md font-medium text-primary-dark ">Title</label>
+            <input type="text" name="title" className="bg-gray-50 border border-gray-300 text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="title" required />
           </div>
-          <input type="submit" value="Submit" className="cursor-pointer focus:outline-none text-white bg-primary-dark hover:bg-primary focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-primary-dark dark:hover:bg-green-700 dark:focus:ring-green-800" />
-        </form> */}
+          <div className="mb-5">
+            <label className="block mb-2 text-md font-medium text-primary-dark">Description</label>
+            <input
+              required
+              placeholder="description"
+              type="text"
+              name="description"
+              className="bg-gray-50 border border-gray-300 text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            />
+          </div>
+          <div className="max-w-lg mx-auto mb-5">
+            <label className="text-md text-primary-dark mb-2 block">Upload file</label>
+            <input name="images" type="file"
+              className="w-full text-black text-sm bg-gray-50 border file:cursor-pointer cursor-pointer file:border-0 file:py-2.5 file:px-4 file:bg-gray-300 file:hover:bg-gray-200 file:text-black rounded-lg" />
+            <p className="text-sm text-primary-dark mt-2">PNG, JPG SVG, WEBP, and GIF are Allowed.(MAX size: 4M)</p>
+          </div>
+          <button type="submit" className="text-white bg-primary-dark hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+        </form>
       </div>
-    </main>
+    </main >
   );
 }
