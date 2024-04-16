@@ -1,29 +1,27 @@
-import { cookies } from 'next/headers';
-import { getSession } from '@/app/actions';
-
 const { NEXT_API_URL } = process.env;
 
 export async function POST(request) {
 
-	const token = await getSession();
+	const headers = request.headers;
+	const authorization = headers.get('authorization');
+	const token = authorization ? authorization.split(' ')[1] : null;
 
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
+
+	const crapData = await request.formData();
 	const latitude = request.geo.latitude || process.env.LATITUDE;
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
+	crapData.append('lat', latitude);
+	crapData.append('long', longitude);
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
-			accept: 'application/json',
-			authorization: 'Bearer ' + token?.value,
+			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
-		body: {
-			...request.body,
-			lat: latitude,
-			long: longitude,
-		},
+		body: crapData,
 	});
 	if (!resp.ok) {
 		return new Response('Bad Stuff happened', {
@@ -33,9 +31,8 @@ export async function POST(request) {
 	const data = await resp.json();
 	return new Response(JSON.stringify(data), {
 		headers: {
-			'Set-Cookie': `token=${token.value}`,
+			'Set-Cookie': `token=${token}`,
 			'content-type': 'application/json',
-			'access-control-allow-methods': 'GET,HEAD',
 			'access-control-allow-origin': '*',
 		},
 		status: 200,

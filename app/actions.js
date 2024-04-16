@@ -3,10 +3,10 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+const { NEXT_PAGE_URL, NEXT_API_URL } = process.env;
 
 export async function handelLogin() {
 	'use server'
-	const { NEXT_PAGE_URL, NEXT_API_URL } = process.env;
 	const redirectUrl = encodeURIComponent(`${NEXT_PAGE_URL}/login`);
 	const url = `${NEXT_API_URL}/auth/google?redirect_url=${redirectUrl}`;
 	redirect(url);
@@ -14,19 +14,26 @@ export async function handelLogin() {
 
 export async function createCrap(fd) {
 	'use server'
-	const title = fd.get('title');
-	const description = fd.get('description');
-	const file = fd.get('images');
+
+	const token = await cookies().get('token');
 	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
 		method: 'POST',
 		body: fd,
+		headers: {
+			authorization: 'Bearer ' + token?.value,
+			credentials: 'include',
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+		}
 	});
+
 }
 
 export async function login(response, token) {
 	//set the cookie
 	'use server'
-	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds expiry for the token cookie
+	const expires = new Date(Date.now() + 60 * 60 * 12 * 1000); //30 seconds expiry for the token cookie
 	await response.cookies.set('token', token, {
 		path: '/',
 		secure: process.env.NODE_ENV === 'production',
@@ -45,8 +52,6 @@ export async function getSession() {
 	//get the cookie
 	'use server'
 	const token = await cookies().get('token'); //token object
-	const time = new Date();
-	console.log('getSession time ===' + time.toLocaleString(), token?.value, token?.value ? 'has cookie token' : 'no cookie token');
 	if (!token) return null;
 	revalidatePath('/');
 	return token;
@@ -60,7 +65,7 @@ export async function updateSession(request) {
 		console.log('updateSession - no token cookie');
 		return
 	}
-	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds
+	const expires = new Date(Date.now() + 60 * 60 * 12 * 1000); //30 seconds
 	const resp = NextResponse.next();
 	await resp.cookies.set('token', token, {
 		path: '/',
