@@ -8,13 +8,10 @@ export async function middleware(request) {
   //updateSession function in actions
 
   if (request.nextUrl.pathname === '/login') {
-    //what do you want to do on the home page
     if (!response) {
       response = NextResponse.next(); //the response object that will contain layout.js and page.js
     }
     if (request.nextUrl.searchParams.has('token')) {
-      //finish the login process by saving the token from the querystring as a cookie
-      // console.log('SET TOKEN', request.nextUrl.searchParams.get('token'));
       await login(response, request.nextUrl.searchParams.get('token')); //function from actions.js
     }
     return response;
@@ -36,6 +33,7 @@ export async function middleware(request) {
     }
     return response;
   }
+
 }
 
 export const config = {

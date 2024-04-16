@@ -1,16 +1,26 @@
 // export const revalidate = false; // means cache forever
-// export const revalidate = 0; // don't cache
-// export const revalidate = 60 * 10; // means cache for 10 mins
-
+export const revalidate = 0; // means cache for 10 mins
 import NavBar from '@/app/components/navbar';
 import { getSession } from '@/app/actions';
+import { cookies } from 'next/headers';
 
 export default async function Page({ params, searchParams }) {
+	cookies();
 	const { distance, keyword } = searchParams;
 	const { NEXT_PAGE_URL } = process.env;
 	const token = await getSession();
-	console.log('page token =', token);
-	const response = await fetch(`${NEXT_PAGE_URL}/api/crap?distance=${distance}${keyword ? '&keyword=' + keyword : ''}`);
+	const response = await fetch(`${NEXT_PAGE_URL}/api/crap?distance=${distance}${keyword ? '&keyword=' + keyword : ''}`, {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token?.value,
+			credentials: 'include',
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+		}
+	});
+	const data = await response.json();
+	console.log('page data =', data);
 
 	return (
 		<main className="flex min-h-screen flex-col items-center py-12">

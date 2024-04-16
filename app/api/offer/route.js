@@ -10,7 +10,8 @@ export async function POST(request) {
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	const { latitude = 45.3499113, longitude = -75.7589776 } = request.geo;
+	const latitude = request.geo.latitude || process.env.LATITUDE;
+	const longitude = request.geo.longitude || process.env.LONGITUDE;
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
