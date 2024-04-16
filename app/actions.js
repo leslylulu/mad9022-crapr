@@ -9,7 +9,8 @@ export async function handelLogin() {
 	'use server'
 	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds expiry for the token cookie
 	const { NEXT_API_URL } = process.env;
-	const redirectUrl = encodeURIComponent('http://localhost:3000/login');
+
+	const redirectUrl = encodeURIComponent(`${NEXT_API_URL}/login`);
 	const url = `${NEXT_API_URL}/auth/google?redirect_url=${redirectUrl}`;
 	await cookies().set('apple', 'orange', {
 		path: '/',

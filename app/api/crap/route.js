@@ -10,7 +10,6 @@ export async function GET(request) {
 	const headers = request.headers;
 	const authorization = headers.get('authorization');
 	const token = authorization ? authorization.split(' ')[1] : null;
-	let time = new Date();
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
