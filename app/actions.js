@@ -3,19 +3,12 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-const { NEXT_PAGE_URL } = process.env;
 
 export async function handelLogin() {
 	'use server'
-	const expires = new Date(Date.now() + 60 * 60 * 12); //30 seconds expiry for the token cookie
-	const { NEXT_API_URL } = process.env;
-
-	const redirectUrl = encodeURIComponent(`${NEXT_API_URL}/login`);
+	const { NEXT_PAGE_URL, NEXT_API_URL } = process.env;
+	const redirectUrl = encodeURIComponent(`${NEXT_PAGE_URL}/login`);
 	const url = `${NEXT_API_URL}/auth/google?redirect_url=${redirectUrl}`;
-	await cookies().set('apple', 'orange', {
-		path: '/',
-		expires: expires,
-	});
 	redirect(url);
 }
 
@@ -39,7 +32,6 @@ export async function login(response, token) {
 		secure: process.env.NODE_ENV === 'production',
 		httpOnly: false,
 		expires: expires,
-		domain: 'localhost',
 	});
 }
 

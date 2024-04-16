@@ -6,7 +6,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 debug on local
 + NEXT_PAGE_URL=http://localhost:3000
 + NEXT_API_URL=http://localhost:4000
-+ GOOGLE_CALLBACK_URL=http://localhost:4000/auth/google/callback
++ LATITUDE=45.3458839
++ LONGITUDE=-75.7732987
+
 
 ## Getting Started
 
