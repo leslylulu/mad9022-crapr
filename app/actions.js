@@ -37,7 +37,7 @@ export async function login(response, token) {
 	await response.cookies.set('token', token, {
 		path: '/',
 		secure: process.env.NODE_ENV === 'production',
-		httpOnly: false,
+		httpOnly: true,
 		expires: expires,
 	});
 }

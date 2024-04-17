@@ -2,19 +2,13 @@
 // export const revalidate = 0; // don't cache
 // export const revalidate = 60 * 10; // means cache for 10 mins
 
-import NavBar from '@/app/components/navbar';
 import { createCrap } from '@/app/actions';
 
 export default async function Page() {
-  // let token = await getSession();
 
   return (
     <main className="flex min-h-screen flex-col items-center py-12">
-      <header className="flex items-center flex-col">
-        <h1 className="text-4xl font-bold">Crapr</h1>
-        <p className="text-xl">Get rid of your crap now</p>
-        <NavBar />
-      </header>
+
       <div className="w-full mt-6 px-12">
         <h2 className="text-center my-3 text-lg">Upload a post of your own crap here.</h2>
 

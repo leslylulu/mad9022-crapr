@@ -1,20 +1,14 @@
-import { cookies } from 'next/headers';
-import { getSession } from '@/app/actions';
 
 export const dynamic = 'force-dynamic'
 const { NEXT_API_URL } = process.env;
 
 export async function GET(request) {
-	// TODO: this is not working, refer link: https://github.com/vercel/next.js/discussions/54840
-	// const token = await getSession();
-	const headers = request.headers;
-	const authorization = headers.get('authorization');
-	const token = authorization ? authorization.split(' ')[1] : null;
+	const url = new URL(request.url);
+	const token = url.searchParams.get('token');
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
 
-	const url = new URL(request.url);
 	const distance = url.searchParams.get('distance');
 	const keyword = url.searchParams.get('keyword');
 	const latitude = request.geo.latitude || process.env.LATITUDE;
@@ -36,9 +30,9 @@ export async function GET(request) {
 	const data = await resp.json();
 	return new Response(JSON.stringify(data), {
 		headers: {
-			'Set-Cookie': `token=${token.value}`,
+			'Set-Cookie': `token=${token}`,
 			'content-type': 'application/json',
-			'access-control-allow-methods': 'GET,HEAD',
+			'access-control-allow-methods': 'GET',
 			'access-control-allow-origin': '*',
 			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 		},

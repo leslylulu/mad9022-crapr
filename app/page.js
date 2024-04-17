@@ -8,15 +8,9 @@ import { cookies } from 'next/headers';
 
 export default async function Home() {
   let token = await getSession();
-
   //called from server-side can accept a return value
   return (
     <main className="flex min-h-screen flex-col items-center py-12">
-      <header className="flex items-center flex-col">
-        <h1 className="text-4xl font-bold">Crapr</h1>
-        <p className="text-xl">Get rid of your crap now</p>
-        <NavBar />
-      </header>
       <section className="mt-12 w-full flex justify-center">
         {
           token?.value ? <div className="px-24">
