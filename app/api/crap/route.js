@@ -68,11 +68,13 @@ export async function POST(request) {
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
+			'Content-Type': 'application/json',
 			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
 		body: crapData,
 	});
+
 	if (!resp.ok) {
 		return new Response('Bad Stuff happened', {
 			status: 500,
