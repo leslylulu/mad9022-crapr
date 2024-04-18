@@ -16,23 +16,17 @@ export async function createCrap(fd) {
 	'use server'
 	const token = await cookies().get('token');
 	const { LATITUDE, LONGITUDE } = process.env;
-	
-	const formData = new FormData();
-	formData.append('lat', LATITUDE);
-	formData.append('long', LONGITUDE);
-	formData.append('title', fd.get('title'));
-	formData.append('description', fd.get('description'));
-	formData.append('images', fd.get('images'));
-	console.log("createCrap fd", formData);
+	fd.append('lat', LATITUDE);
+	fd.append('long', LONGITUDE);
+	console.log("createCrap fd", fd);
 	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
 		method: 'POST',
 		headers: {
 			accept: 'application/json',
 			authorization: token?.value,
-			'content-type': 2367
 		},
 		next: { revalidate: 0 },
-		body: formData,
+		body: fd,
 	});
 	if (!response.ok) {
 		console.log('createCrap failed', response.status);
