@@ -18,6 +18,7 @@ export async function createCrap(fd) {
 	const response = await fetch(`${NEXT_PAGE_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
+			'Content-Type': 'multipart/form-data',
 			authorization: token?.value,
 		},
 		body: fd,
