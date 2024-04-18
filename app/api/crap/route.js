@@ -54,7 +54,9 @@ export async function GET(request) {
 export async function POST(request) {
 
 	const crapData = await request.formData();
-	const token = crapData.get('token');
+	// const token = crapData.get('token');
+	// const token = request.cookies.token;
+	const token = request.headers.get('authorization');
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}

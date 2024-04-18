@@ -1,5 +1,5 @@
 // export const revalidate = false; // means cache forever
-// export const revalidate = 0; // don't cache
+export const revalidate = 0; // don't cache
 // export const revalidate = 60 * 10; // means cache for 10 mins
 
 import { createCrap } from '@/app/actions';

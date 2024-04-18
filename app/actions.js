@@ -15,9 +15,11 @@ export async function handelLogin() {
 export async function createCrap(fd) {
 	'use server'
 	const token = await cookies().get('token');
-	fd.append('token', token?.value);
 	const response = await fetch(`${NEXT_PAGE_URL}/api/crap`, {
 		method: 'POST',
+		headers: {
+			authorization: token?.value,
+		},
 		body: fd,
 	});
 	if (!response.ok) {

@@ -33,7 +33,7 @@ export async function middleware(request) {
     }
     return response;
   }
-  if (request.nextUrl.pathname.startsWith('/offer')) {
+  if (request.nextUrl.pathname.startsWith('/offer') || request.nextUrl.pathname.startsWith('/mine')) {
     if (!response) {
       response = NextResponse.next(); //the response object that will contain layout.js and page.js
     }
@@ -46,5 +46,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/', '/login', '/crap', '/offer'],
+  matcher: ['/', '/login', '/crap', '/offer', '/mine'],
 };
