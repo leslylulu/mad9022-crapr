@@ -84,7 +84,7 @@ export async function POST(request) {
 	return new Response(JSON.stringify(data), {
 		headers: {
 			'Set-Cookie': `token=${token}`,
-			'content-type': 'application/json',
+			// 'content-type': 'application/json',
 			'access-control-allow-origin': '*',
 		},
 		status: 200,
