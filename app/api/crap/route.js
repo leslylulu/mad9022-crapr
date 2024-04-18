@@ -9,10 +9,13 @@ export async function GET(request) {
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	console.log("checkpoint2")
+	console.log("checkpoint2.1 request.geo", JSON.stringify(request.geo))
+	console.log("checkpoint2.2 request.geo.latitude", request.geo.latitude)
+	console.log("checkpoint2.3 request.geo.longitude", request.geo.longitude)
 
 	const distance = url.searchParams.get('distance');
 	const keyword = url.searchParams.get('keyword');
+
 	const latitude = request.geo.latitude || process.env.LATITUDE;
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
 	console.log("checkpoint3", `${NEXT_API_URL}/api/crap?query=${keyword}${distance ? '&distance=' + distance : ''}${latitude ? "&lat=" + latitude : ''}${longitude ? "&long=" + longitude : ''}`)
