@@ -17,10 +17,7 @@ export async function POST(request) {
 	// console.log("checkpoint 222 ===", request?.formData);
 	// console.log("checkpoint 333 ===", await request?.formData());
 	const crapData = await request.formData();
-
 	console.log("checkpoint 444 ===", crapData);
-	console.log("checkpoint 555 ===", formData);
-
 
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
