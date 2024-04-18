@@ -1,13 +1,7 @@
-export const dynamicParams = true
-export const revalidate = false
-export const fetchCache = 'auto'
-export const runtime = 'nodejs'
-export const preferredRegion = 'auto'
-
-// export const dynamic = 'force-dynamic';
+export const revalidate = 0
+export const dynamic = 'force-dynamic';
 
 const { NEXT_API_URL } = process.env;
-
 
 export async function POST(request) {
 
@@ -25,15 +19,15 @@ export async function POST(request) {
 	const crapData = await request.formData();
 
 	console.log("checkpoint 444 ===", crapData);
+	console.log("checkpoint 555 ===", formData);
 
-	// formData.append('lat', latitude);
-	// formData.append('long', longitude);
 
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
 			authorization: 'Bearer ' + token,
 		},
+		next: { revalidate: 0 },
 		body: crapData
 	});
 
@@ -46,9 +40,11 @@ export async function POST(request) {
 	return new Response(JSON.stringify(data), {
 		headers: {
 			'Set-Cookie': `token=${token}`,
+			'content-type': 'application/json',
 			'access-control-allow-origin': '*',
 			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
 			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+			'Cache-Control': 'max-age=0',
 		},
 		status: 200,
 	});

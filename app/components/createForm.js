@@ -22,7 +22,7 @@ export default function CreateForm() {
 				</div>
 				<div className="max-w-lg mx-auto mb-5">
 					<label className="text-md text-primary-dark mb-2 block">Upload file</label>
-					<input name="images" type="file"
+					<input name="images" type="file" multiple
 						className="w-full text-black text-sm bg-gray-50 border file:cursor-pointer cursor-pointer file:border-0 file:py-2.5 file:px-4 file:bg-gray-300 file:hover:bg-gray-200 file:text-black rounded-lg" />
 					<p className="text-sm text-primary-dark mt-2">PNG, JPG SVG, WEBP, and GIF are Allowed.(MAX size: 4M)</p>
 				</div>
