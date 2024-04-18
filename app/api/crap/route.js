@@ -60,6 +60,7 @@ export async function POST(request) {
 	console.log("checkpoint create token", token);
 	const latitude = request.geo.latitude || process.env.LATITUDE;
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
+	console.log("geo ===", latitude, longitude);
 	const crapData = await request.formData();
 	console.log("checkpoint create crapData", crapData, JSON.stringify(crapData));
 	crapData.append('lat', latitude);
