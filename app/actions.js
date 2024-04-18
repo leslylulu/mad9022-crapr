@@ -15,7 +15,6 @@ export async function handelLogin() {
 export async function createCrap(fd) {
 	'use server'
 	const token = await cookies().get('token');
-	console.log("vercel log fd", fd, JSON.stringify(fd));
 	const response = await fetch(`${NEXT_PAGE_URL}/api/crap`, {
 		method: 'POST',
 		headers: {

@@ -40,6 +40,7 @@ export async function middleware(request) {
     if (!request.cookies.has('token')) {
       return NextResponse.redirect(request.nextUrl.origin);
     }
+    console.log('response', response);
     return response;
   }
 
