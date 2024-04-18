@@ -19,23 +19,22 @@ export async function POST(request) {
 	const latitude = request?.geo?.latitude || process.env.LATITUDE;
 	const longitude = request?.geo?.longitude || process.env.LONGITUDE;
 	console.log("geo ===", latitude, longitude);
-	console.log("checkpoint 111 ===", request);
-	console.log("checkpoint 222 ===", request?.formData);
-	console.log("checkpoint 333 ===", await request?.formData());
-	const formData = await request.formData();
+	// console.log("checkpoint 111 ===", request);
+	// console.log("checkpoint 222 ===", request?.formData);
+	// console.log("checkpoint 333 ===", await request?.formData());
+	const crapData = await request.formData();
 
-	console.log("checkpoint 444 ===", formData);
+	console.log("checkpoint 444 ===", crapData);
 
-	formData.append('lat', latitude);
-	formData.append('long', longitude);
+	// formData.append('lat', latitude);
+	// formData.append('long', longitude);
 
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
 			authorization: 'Bearer ' + token,
 		},
-		next: { revalidate: 0 },
-		body: formData
+		body: crapData
 	});
 
 	if (!resp.ok) {
