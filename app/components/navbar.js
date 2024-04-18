@@ -11,7 +11,7 @@ export default async function NavBar(props) {
       </Link>
       {token?.value && (
         <>
-          <Link href="/offer" className="text-md bg-primary-dark text-white p-3 rounded-md">
+          <Link href="/offer" className="text-md min-w-24 bg-primary-dark text-white p-3 rounded-md">
             Offer Crap
           </Link>
           <Link href="/mine" className="text-md bg-primary-dark text-white p-3 rounded-md">

@@ -14,19 +14,17 @@ export async function handelLogin() {
 
 export async function createCrap(fd) {
 	'use server'
-
 	const token = await cookies().get('token');
+	fd.append('token', token?.value);
 	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
 		method: 'POST',
 		body: fd,
-		headers: {
-			authorization: 'Bearer ' + token?.value,
-			credentials: 'include',
-			'Access-Control-Allow-Origin': '*',
-			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-		}
 	});
+	if (!response.ok) {
+		console.log('createCrap failed', response.status);
+	} else {
+		redirect('/mine');
+	}
 
 }
 

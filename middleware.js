@@ -33,9 +33,18 @@ export async function middleware(request) {
     }
     return response;
   }
+  if (request.nextUrl.pathname.startsWith('/offer')) {
+    if (!response) {
+      response = NextResponse.next(); //the response object that will contain layout.js and page.js
+    }
+    if (!request.cookies.has('token')) {
+      return NextResponse.redirect(request.nextUrl.origin);
+    }
+    return response;
+  }
 
 }
 
 export const config = {
-  matcher: ['/', '/login', '/crap'],
+  matcher: ['/', '/login', '/crap', '/offer'],
 };
