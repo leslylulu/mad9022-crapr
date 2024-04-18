@@ -29,6 +29,7 @@ export async function createCrap(fd) {
 		headers: {
 			accept: 'application/json',
 			authorization: token?.value,
+			'content-type': 2367
 		},
 		next: { revalidate: 0 },
 		body: formData,
