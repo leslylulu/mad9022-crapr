@@ -58,6 +58,24 @@ export async function setInterested(id) {
 	return true;
 }
 
+export async function setAgree(id) {
+	'use server'
+	const token = await cookies().get('token');
+	// console.log("setInterested ==", id, token?.value);
+	const response = await fetch(`${NEXT_PAGE_URL}/api/agree`, {
+		method: 'POST',
+		body: JSON.stringify({ id, token: token?.value }),
+	});
+	if (!response.ok) {
+		console.log('agree failed', response.status);
+		return false
+	}
+	const result = await response.json();
+	console.log("setAgree result", result);
+	return true;
+}
+
+
 export async function suggestLocation(id, address, date, time) {
 	'use server'
 	console.log("suggestLocation", id, address, date, time);

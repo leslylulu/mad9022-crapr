@@ -7,14 +7,14 @@ const { NEXT_API_URL } = process.env;
 
 export async function POST(request) {
 
-	const interestedCrap = await request.json();
-	console.log("interestedCrap", interestedCrap);
-	const token = interestedCrap.token;
+	const agreeCrap = await request.json();
+	console.log("agreeCrap", agreeCrap);
+	const token = agreeCrap.token;
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	const id = interestedCrap.id;
-	let resp = await fetch(`${NEXT_API_URL}/api/crap/${id}/interested`, {
+	const id = agreeCrap.id;
+	let resp = await fetch(`${NEXT_API_URL}/api/crap/${id}/agree`, {
 		method: 'POST',
 		headers: {
 			authorization: 'Bearer ' + token,

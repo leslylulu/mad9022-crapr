@@ -3,6 +3,7 @@ import { getSession } from '@/app/actions';
 import DeleteButton from '@/app/components/deleteButton';
 import InterestedButton from '@/app/components/interestedButton';
 import SuggestForm from '@/app/components/suggestForm';
+import AgreeButton from '@/app/components/agreeButton';
 import Image from 'next/image';
 import jwt from 'jsonwebtoken';
 
@@ -38,6 +39,7 @@ const Page = async ({ params, searchParams }) => {
 	const SCHEDULED = 'SCHEDULED';
 	const AGREED = 'AGREED';
 	const FLUSHED = 'FLUSHED';
+	console.log('detail.status =', detail);
 
 	return (
 		<div className="container">
@@ -58,6 +60,9 @@ const Page = async ({ params, searchParams }) => {
 					}
 					{
 						detail.status === INTERESTED && <span>Someone has scheduled to pick up this crap</span>
+					}
+					{
+						detail.status === SCHEDULED && <AgreeButton id={detail._id} suggestion={detail.suggestion} />
 					}
 				</div>
 			}
