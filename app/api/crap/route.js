@@ -50,3 +50,74 @@ export async function GET(request) {
 		status: 200,
 	});
 }
+
+export async function POST(request) {
+
+	const crapData = await request.formData();
+	const token = crapData.get('token');
+	if (!token) {
+		return new Response(null, { status: 401 }) // User is not authenticated
+	}
+	delete crapData.token;
+	const latitude = request.geo.latitude || process.env.LATITUDE;
+	const longitude = request.geo.longitude || process.env.LONGITUDE;
+	crapData.append('lat', latitude);
+	crapData.append('long', longitude);
+	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
+		method: 'POST',
+		headers: {
+			authorization: 'Bearer ' + token,
+		},
+		next: { revalidate: 0 },
+		body: crapData,
+	});
+	if (!resp.ok) {
+		return new Response('Bad Stuff happened', {
+			status: 500,
+		});
+	}
+	const data = await resp.json();
+	return new Response(JSON.stringify(data), {
+		headers: {
+			'Set-Cookie': `token=${token}`,
+			'content-type': 'application/json',
+			'access-control-allow-origin': '*',
+		},
+		status: 200,
+	});
+}
+
+export async function DELETE(request) {
+	const url = new URL(request.url);
+	const token = url.searchParams.get('token');
+	if (!token) {
+		return new Response(null, { status: 401 }) // User is not authenticated
+	}
+	const id = url.searchParams.get('id');
+	// console.log('id =', id);
+	console.log("checkpoint3", `${NEXT_API_URL}/api/crap/${id}`)
+	let resp = await fetch(`${NEXT_API_URL}/api/crap${id}`, {
+		method: 'DELETE',
+		headers: {
+			accept: 'application/json',
+			authorization: 'Bearer ' + token,
+		},
+		next: { revalidate: 0 },
+	});
+	if (!resp.ok) {
+		return new Response('Bad Stuff happened', {
+			status: 500,
+		});
+	}
+	const data = await resp.json();
+	return new Response(JSON.stringify(data), {
+		headers: {
+			'Set-Cookie': `token=${token}`,
+			'content-type': 'application/json',
+			'access-control-allow-origin': '*',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+		},
+		status: 200,
+	});
+
+}

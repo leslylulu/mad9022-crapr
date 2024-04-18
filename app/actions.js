@@ -16,7 +16,7 @@ export async function createCrap(fd) {
 	'use server'
 	const token = await cookies().get('token');
 	fd.append('token', token?.value);
-	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
+	const response = await fetch(`${NEXT_PAGE_URL}/api/crap`, {
 		method: 'POST',
 		body: fd,
 	});
@@ -25,8 +25,65 @@ export async function createCrap(fd) {
 	} else {
 		redirect('/mine');
 	}
-
 }
+
+export async function handleDeleteCrap(id) {
+	'use server'
+	const token = await cookies().get('token');
+	const response = await fetch(`${NEXT_PAGE_URL}/api/crap?token=${token?.value}&id=${id}`, {
+		method: 'DELETE',
+	});
+	if (!response.ok) {
+		console.log('delete failed', response.status);
+	} else {
+		redirect('/mine');
+	}
+}
+
+export async function setInterested(id) {
+	'use server'
+	const token = await cookies().get('token');
+	// console.log("setInterested ==", id, token?.value);
+	const response = await fetch(`${NEXT_PAGE_URL}/api/interested`, {
+		method: 'POST',
+		body: JSON.stringify({ id, token: token?.value }),
+	});
+	// console.log("setInterested response", response);
+	if (!response.ok) {
+		console.log('delete failed', response.status);
+		return false
+	}
+	const result = await response.json();
+	console.log("setInterested result", result);
+	return true;
+}
+
+export async function suggestLocation(id, address, date, time) {
+	'use server'
+	console.log("suggestLocation", id, address, date, time);
+	const token = await cookies().get('token');
+	const response = await fetch(`${NEXT_PAGE_URL}/api/suggest`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			id,
+			token: token?.value,
+			address,
+			date,
+			time,
+		}),
+	});
+	if (!response.ok) {
+		console.log('suggestLocation failed', response.status);
+		return null
+	}
+	const result = await response.json();
+	return result?.data?.suggestion;
+}
+
+
 
 export async function login(response, token) {
 	//set the cookie
