@@ -1,5 +1,6 @@
 
 export const runtime = 'edge'; // 'nodejs' is the default
+export const config = { runtime: 'edge' };
 // execute this function on iad1 or hnd1, based on the connecting client location
 export const preferredRegion = ['iad1'];
 export const dynamic = 'force-dynamic';
@@ -61,10 +62,12 @@ export async function POST(request) {
 	const latitude = request.geo.latitude || process.env.LATITUDE;
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
 	console.log("geo ===", latitude, longitude);
+
 	const crapData = await request.formData();
 	console.log("checkpoint create crapData", crapData, JSON.stringify(crapData));
 	crapData.append('lat', latitude);
 	crapData.append('long', longitude);
+
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
