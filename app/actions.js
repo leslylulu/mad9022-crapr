@@ -31,6 +31,7 @@ export async function createCrap(fd) {
 	if (!response.ok) {
 		console.log('createCrap failed', response.status);
 	} else {
+		revalidatePath('/mine');
 		redirect('/mine');
 	}
 }
