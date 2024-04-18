@@ -1,11 +1,11 @@
 // export const revalidate = false; // means cache forever
 export const revalidate = 0; // don't cache
 // export const revalidate = 60 * 10; // means cache for 10 mins
-
+import { cookies } from 'next/headers';
 import { createCrap } from '@/app/actions';
 
 export default async function Page() {
-
+  cookies();
   return (
     <main className="flex min-h-screen flex-col items-center py-12">
 

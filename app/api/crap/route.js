@@ -65,10 +65,10 @@ export async function POST(request) {
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
 	crapData.append('lat', latitude);
 	crapData.append('long', longitude);
+
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json',
 			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
@@ -93,11 +93,11 @@ export async function POST(request) {
 
 export async function DELETE(request) {
 	const url = new URL(request.url);
-	const token = url.searchParams.get('token');
+	// const token = url.searchParams.get('token');
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	const id = url.searchParams.get('id');
+	// const id = url.searchParams.get('id');
 	// console.log('id =', id);
 	console.log("checkpoint3", `${NEXT_API_URL}/api/crap/${id}`)
 	let resp = await fetch(`${NEXT_API_URL}/api/crap${id}`, {

@@ -18,7 +18,6 @@ export async function createCrap(fd) {
 	const response = await fetch(`${NEXT_PAGE_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json',
 			authorization: token?.value,
 		},
 		body: fd,
