@@ -69,7 +69,7 @@ export async function POST(request) {
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'multipart/form-data',
+			'Content-Type': 'multipart/form-data;boundary=----WebKitFormBoundaryyrV7KO0BoCBuDbTL',
 			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
