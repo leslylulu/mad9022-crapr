@@ -4,6 +4,7 @@ import DeleteButton from '@/app/components/deleteButton';
 import InterestedButton from '@/app/components/interestedButton';
 import SuggestForm from '@/app/components/suggestForm';
 import AgreeButton from '@/app/components/agreeButton';
+import FlushButton from '@/app/components/flushButton';
 import Image from 'next/image';
 import jwt from 'jsonwebtoken';
 
@@ -51,6 +52,12 @@ const Page = async ({ params, searchParams }) => {
 					{
 						detail.status === INTERESTED && <SuggestForm id={detail._id} />
 					}
+					{
+						detail.status === AGREED && <FlushButton id={detail._id} suggestion={detail.suggestion} />
+					}
+					{
+						detail.status === FLUSHED && <p>This crap has been flushed away.</p>
+					}
 				</h1>
 			}
 			{
@@ -63,6 +70,17 @@ const Page = async ({ params, searchParams }) => {
 					}
 					{
 						detail.status === SCHEDULED && <AgreeButton id={detail._id} suggestion={detail.suggestion} />
+					}
+					{
+						detail.status === AGREED && <div>
+							<p>The owner is waiting for you to come and take this item away.</p>
+							<p>{detail.suggestion.address}</p>
+							<p>{detail.suggestion.date}</p>
+							<p>{detail.suggestion.time}</p>
+						</div>
+					}
+					{
+						detail.status === FLUSHED && <p>This crap has been flushed away.</p>
 					}
 				</div>
 			}

@@ -76,6 +76,41 @@ export async function setAgree(id) {
 }
 
 
+
+export async function setDisAgree(id) {
+	'use server'
+	const token = await cookies().get('token');
+	// console.log("setInterested ==", id, token?.value);
+	const response = await fetch(`${NEXT_PAGE_URL}/api/disagree`, {
+		method: 'POST',
+		body: JSON.stringify({ id, token: token?.value }),
+	});
+	if (!response.ok) {
+		console.log('disagree failed', response.status);
+		return false
+	}
+	const result = await response.json();
+	return true;
+}
+
+
+export async function setFlush(id) {
+	'use server'
+	const token = await cookies().get('token');
+	const response = await fetch(`${NEXT_PAGE_URL}/api/flush`, {
+		method: 'POST',
+		body: JSON.stringify({ id, token: token?.value }),
+	});
+	if (!response.ok) {
+		console.log('flush failed', response.status);
+		return false
+	}
+	const result = await response.json();
+	console.log("setAgree result", result);
+	return true;
+}
+
+
 export async function suggestLocation(id, address, date, time) {
 	'use server'
 	console.log("suggestLocation", id, address, date, time);
