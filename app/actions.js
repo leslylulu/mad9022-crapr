@@ -21,6 +21,7 @@ export async function createCrap(fd) {
 		headers: {
 			authorization: token?.value,
 		},
+		next: { revalidate: 0 },
 		body: fd,
 	});
 	if (!response.ok) {

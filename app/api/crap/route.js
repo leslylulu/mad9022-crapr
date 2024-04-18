@@ -53,31 +53,24 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-	const crapData = await request.formData();
-	console.log("production log crapData ===", crapData);
-	const jsonData = await request.json();
-	console.log("production log jsonData ===", jsonData);
 	const token = request.headers.get('authorization');
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
+	console.log("checkpoint create token", token);
 	const latitude = request.geo.latitude || process.env.LATITUDE;
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
-
-	const newCrapData = new FormData();
-	newCrapData.append('lat', latitude);
-	newCrapData.append('long', longitude);
-	newCrapData.append('title', crapData.get('title'));
-	newCrapData.append('description', crapData.get('description'));
-	newCrapData.append('images', crapData.get('images'));
-	console.log("test log 222", JSON.stringify(newCrapData));
+	const crapData = await request.formData();
+	console.log("checkpoint create crapData", crapData, JSON.stringify(crapData));
+	crapData.append('lat', latitude);
+	crapData.append('long', longitude);
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
 			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
-		body: newCrapData,
+		body: crapData,
 	});
 
 	if (!resp.ok) {
