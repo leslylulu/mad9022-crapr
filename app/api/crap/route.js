@@ -54,8 +54,7 @@ export async function GET(request) {
 export async function POST(request) {
 
 	const crapData = await request.formData();
-	// const token = crapData.get('token');
-	// const token = request.cookies.token;
+	console.log("production log crapData ===", crapData);
 	const token = request.headers.get('authorization');
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
@@ -69,7 +68,7 @@ export async function POST(request) {
 	newCrapData.append('title', crapData.get('title'));
 	newCrapData.append('description', crapData.get('description'));
 	newCrapData.append('images', crapData.get('images'));
-	console.log("test log", JSON.stringify(newCrapData));
+	console.log("test log 222", JSON.stringify(newCrapData));
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
@@ -89,6 +88,8 @@ export async function POST(request) {
 		headers: {
 			'Set-Cookie': `token=${token}`,
 			'access-control-allow-origin': '*',
+			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 		},
 		status: 200,
 	});
