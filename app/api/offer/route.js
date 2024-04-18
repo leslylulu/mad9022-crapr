@@ -2,6 +2,12 @@ export const dynamic = 'force-dynamic';
 
 const { NEXT_API_URL } = process.env;
 
+export const config = {
+	api: {
+		bodyParser: false,
+	}
+};
+
 export async function POST(request) {
 
 	const token = request.headers.get('authorization');
@@ -9,8 +15,8 @@ export async function POST(request) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
 	console.log("checkpoint create token", token);
-	const latitude = request.geo.latitude || process.env.LATITUDE;
-	const longitude = request.geo.longitude || process.env.LONGITUDE;
+	const latitude = request?.geo?.latitude || process.env.LATITUDE;
+	const longitude = request?.geo?.longitude || process.env.LONGITUDE;
 	console.log("geo ===", latitude, longitude);
 	const formData = await request.formData();
 	console.log("checkpoint create formData", formData);
