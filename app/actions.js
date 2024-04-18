@@ -16,9 +16,14 @@ export async function createCrap(fd) {
 	'use server'
 	const token = await cookies().get('token');
 	const { LATITUDE, LONGITUDE } = process.env;
-	fd.append('lat', LATITUDE);
-	fd.append('long', LONGITUDE);
-	console.log("createCrap fd", fd);
+	
+	const formData = new FormData();
+	formData.append('lat', LATITUDE);
+	formData.append('long', LONGITUDE);
+	formData.append('title', fd.get('title'));
+	formData.append('description', fd.get('description'));
+	formData.append('images', fd.get('images'));
+	console.log("createCrap fd", formData);
 	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
 		method: 'POST',
 		headers: {
@@ -26,7 +31,7 @@ export async function createCrap(fd) {
 			authorization: token?.value,
 		},
 		next: { revalidate: 0 },
-		body: fd,
+		body: formData,
 	});
 	if (!response.ok) {
 		console.log('createCrap failed', response.status);
