@@ -19,10 +19,12 @@ export async function POST(request) {
 	const latitude = request?.geo?.latitude || process.env.LATITUDE;
 	const longitude = request?.geo?.longitude || process.env.LONGITUDE;
 	console.log("geo ===", latitude, longitude);
-	const formData = await request.formData();
 	console.log("checkpoint 111 ===", request);
 	console.log("checkpoint 222 ===", request?.formData);
-	console.log("checkpoint 333 ===", formData);
+	console.log("checkpoint 333 ===", await request?.formData());
+	const formData = await request.formData();
+
+	console.log("checkpoint 444 ===", formData);
 
 	formData.append('lat', latitude);
 	formData.append('long', longitude);
