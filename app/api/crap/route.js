@@ -1,7 +1,7 @@
 
-// export const runtime = 'edge'; // 'nodejs' is the default
+export const runtime = 'edge'; // 'nodejs' is the default
 // execute this function on iad1 or hnd1, based on the connecting client location
-// export const preferredRegion = [''];
+export const preferredRegion = ['iad1'];
 export const dynamic = 'force-dynamic'
 const { NEXT_API_URL } = process.env;
 
@@ -60,19 +60,23 @@ export async function POST(request) {
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	delete crapData.token;
 	const latitude = request.geo.latitude || process.env.LATITUDE;
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
-	crapData.append('lat', latitude);
-	crapData.append('long', longitude);
 
+	const newCrapData = new FormData();
+	newCrapData.append('lat', latitude);
+	newCrapData.append('long', longitude);
+	newCrapData.append('title', crapData.get('title'));
+	newCrapData.append('description', crapData.get('description'));
+	newCrapData.append('images', crapData.get('images'));
+	console.log("test log", JSON.stringify(newCrapData));
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
 			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
-		body: crapData,
+		body: newCrapData,
 	});
 
 	if (!resp.ok) {
