@@ -1,7 +1,7 @@
 
-export const runtime = 'edge'; // 'nodejs' is the default
+// export const runtime = 'edge'; // 'nodejs' is the default
 // execute this function on iad1 or hnd1, based on the connecting client location
-export const preferredRegion = ['iad1', 'hnd1'];
+// export const preferredRegion = [''];
 export const dynamic = 'force-dynamic'
 const { NEXT_API_URL } = process.env;
 
@@ -69,7 +69,6 @@ export async function POST(request) {
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'multipart/form-data;boundary=----WebKitFormBoundaryyrV7KO0BoCBuDbTL',
 			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
@@ -85,7 +84,6 @@ export async function POST(request) {
 	return new Response(JSON.stringify(data), {
 		headers: {
 			'Set-Cookie': `token=${token}`,
-			// 'content-type': 'application/json',
 			'access-control-allow-origin': '*',
 		},
 		status: 200,
