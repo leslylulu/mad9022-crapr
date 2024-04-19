@@ -13,11 +13,11 @@ export async function GET(request) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
 	const distance = url.searchParams.get('distance');
-	const keyword = url.searchParams.get('keyword');
+	const keyword = url.searchParams.has('keyword') ? url.searchParams.get('keyword'): undefined;
 
 	const latitude = request.geo.latitude || process.env.LATITUDE;
 	const longitude = request.geo.longitude || process.env.LONGITUDE;
-	let resp = await fetch(`${NEXT_API_URL}/api/crap?query=${keyword}${distance ? '&distance=' + distance : ''}${latitude ? "&lat=" + latitude : ''}${longitude ? "&long=" + longitude : ''}`, {
+	let resp = await fetch(`${NEXT_API_URL}/api/crap?query=${keyword ? keyword : ''}${distance ? '&distance=' + distance : ''}${latitude ? "&lat=" + latitude : ''}${longitude ? "&long=" + longitude : ''}`, {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
