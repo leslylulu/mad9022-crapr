@@ -136,11 +136,10 @@ export async function suggestLocation(id, address, date, time) {
 		}),
 	});
 	if (!response.ok) {
-		console.log('suggestLocation failed', response.status);
-		return null
+		return { status: response.status, message: response.statusText }
 	}
 	const result = await response.json();
-	return result?.data?.suggestion;
+	return { status: response.status, result: result }
 }
 
 

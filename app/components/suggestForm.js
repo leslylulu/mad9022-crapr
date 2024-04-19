@@ -5,6 +5,9 @@ import { suggestLocation } from '@/app/actions';
 export default function SuggestForm(props) {
 	const id = props.id;
 	const [suggestion, setSuggestion] = useState(null);
+	const [code, setCode] = useState(null);
+	const [message, setMessage] = useState(null);
+	const [localDate, setLocalDate] = useState(null);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -12,8 +15,15 @@ export default function SuggestForm(props) {
 		const address = formData.get('address');
 		const date = formData.get('date');
 		const time = formData.get('time');
-		const data = await suggestLocation(id, address, date, time);
-		setSuggestion(data);
+		const response = await suggestLocation(id, address, date, time);
+		if (response.status !== 200) {
+			setCode(response.status);
+			setMessage(response.message);
+		} else {
+			setSuggestion(response.result?.data?.suggestion);
+			const date = response.result?.data?.suggestion?.date;
+			setLocalDate(new Date(date));
+		}
 	};
 
 	return (
@@ -21,10 +31,24 @@ export default function SuggestForm(props) {
 			{
 				suggestion ? <div>
 					<p>Waiting for the buyer to agree to the proposed pickup:</p>
-					<p>Address: {suggestion.address}</p>
-					<p>Date: {suggestion.date}</p>
-					<p>Time: {suggestion.time}</p>
+					<div className="bg-white p-3 rounded-lg text-black">
+						<p>
+							<span className="font-bold">Address:</span>
+							<span className="ml-2">{suggestion.address}</span>
+						</p>
+						<p>
+							<span className="font-bold">Date:</span>
+							<span className="ml-2">{localDate.toLocaleDateString()}</span>
+						</p>
+						<p>
+							<span className="font-bold">Time:</span>
+							<span className="ml-2">{suggestion.time}</span>
+						</p>
+					</div>
 				</div> : <form onSubmit={handleSubmit}>
+					{
+						code && code !== 200 && <p className="text-red-800 bg-red-200 p-3 mb-3 rounded-lg">Faild to Suggest. HTTP status {code} - {message}</p>
+					}
 					<div className="mb-5 flex w-full items-center">
 						<label className="inline-block text-md text-primary-dark w-1/3">Pickup Address:</label>
 						<input type="test" name="address" className="bg-gray-50 inline-block border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 " placeholder="pickup address" required />
