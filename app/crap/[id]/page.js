@@ -7,6 +7,7 @@ import AgreeButton from '@/app/components/agreeButton';
 import FlushButton from '@/app/components/flushButton';
 import Image from 'next/image';
 import isCurrentUser from '@/app/utils';
+import { cookies } from 'next/headers';
 
 const { NEXT_API_URL } = process.env;
 const AVAILABLE = 'AVAILABLE';
@@ -16,6 +17,7 @@ const AGREED = 'AGREED';
 const FLUSHED = 'FLUSHED';
 
 const Page = async ({ params }) => {
+	cookies();
 	const { id } = params;
 	const token = await getSession();
 	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}?`, {

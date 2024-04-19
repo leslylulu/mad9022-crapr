@@ -55,6 +55,7 @@ export async function setInterested(id) {
 		},
 		next: { revalidate: 0 },
 	});
+
 	try {
 		if (!response.ok) throw new Error(JSON.stringify({ msg: "failed Suggest", code: response.status }));
 	} catch (err) {
@@ -67,18 +68,19 @@ export async function setInterested(id) {
 export async function setAgree(id) {
 	'use server'
 	const token = await cookies().get('token');
-	// console.log("setInterested ==", id, token?.value);
-	const response = await fetch(`${NEXT_PAGE_URL}/api/agree`, {
+	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}/agree`, {
 		method: 'POST',
-		body: JSON.stringify({ id, token: token?.value }),
+		headers: {
+			authorization: 'Bearer ' + token?.value,
+		},
+		next: { revalidate: 0 },
 	});
-	if (!response.ok) {
-		console.log('agree failed', response.status);
-		return false
+	try {
+		if (!response.ok) throw new Error(JSON.stringify({ msg: "failed agreed", code: response.status }));
+	} catch (err) {
+		return { status: response.status, message: "Failed to Agreed" }
 	}
-	const result = await response.json();
-	console.log("setAgree result", result);
-	return true;
+	return { status: response.status }
 }
 
 
@@ -87,16 +89,19 @@ export async function setDisAgree(id) {
 	'use server'
 	const token = await cookies().get('token');
 	// console.log("setInterested ==", id, token?.value);
-	const response = await fetch(`${NEXT_PAGE_URL}/api/disagree`, {
+	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}/disagree`, {
 		method: 'POST',
-		body: JSON.stringify({ id, token: token?.value }),
+		headers: {
+			authorization: 'Bearer ' + token?.value,
+		},
+		next: { revalidate: 0 },
 	});
-	if (!response.ok) {
-		console.log('disagree failed', response.status);
-		return false
+	try {
+		if (!response.ok) throw new Error(JSON.stringify({ msg: "failed disagreed", code: response.status }));
+	} catch (err) {
+		return { status: response.status, message: "Failed to DisAgreed" }
 	}
-	const result = await response.json();
-	return true;
+	return { status: response.status }
 }
 
 

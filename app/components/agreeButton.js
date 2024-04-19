@@ -36,7 +36,9 @@ export default function AgreeButton(props) {
 							data-twe-ripple-color="light"
 							onClick={async () => {
 								const response = await setAgree(id);
-								if (response) {
+								if (response?.status !== 200) {
+									setMessage(response?.message)
+								} else {
 									setMessage('The owner is waiting for you to come and take this item away.')
 								}
 							}}
@@ -49,7 +51,9 @@ export default function AgreeButton(props) {
 							data-twe-ripple-color="light"
 							onClick={async () => {
 								const response = await setDisAgree(id);
-								if (response) {
+								if (response?.status !== 200) {
+									setMessage(response?.message)
+								} else {
 									setMessage('The owner will change Address Date and Time again.')
 								}
 							}}
