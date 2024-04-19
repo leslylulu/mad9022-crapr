@@ -8,13 +8,13 @@
   --background-end-rgb: #000;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: #000;
     --background-start-rgb: #e8f3dd;
     --background-end-rgb: #e8f3dd;
   }
-}
+} */
 
 body {
   color: var(--foreground-rgb);
