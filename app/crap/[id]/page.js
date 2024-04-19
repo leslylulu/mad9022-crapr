@@ -48,7 +48,6 @@ const Page = async ({ params }) => {
 	const result = await response.json();
 	const detail = result?.data;
 	const isOwner = isCurrentUser(token?.value, detail?.owner._id);
-
 	const date = detail?.suggestion?.date ? new Date(detail?.suggestion?.date) : '';
 	const localDate = date ? date.toLocaleDateString() : '';
 
@@ -81,7 +80,7 @@ const Page = async ({ params }) => {
 						</div>
 					}
 					{
-						detail.status === AGREED && <FlushButton id={detail._id} suggestion={detail.suggestion} />
+						detail.status === AGREED && <FlushButton id={detail._id} suggestion={detail?.suggestion} />
 					}
 					{
 						detail.status === FLUSHED && <p>This crap has been flushed away.</p>
@@ -97,7 +96,7 @@ const Page = async ({ params }) => {
 						detail.status === INTERESTED && <span>Someone has scheduled to pick up this crap</span>
 					}
 					{
-						detail.status === SCHEDULED && <AgreeButton id={detail._id} suggestion={detail.suggestion} />
+						detail.status === SCHEDULED && <AgreeButton id={detail._id} suggestion={detail?.suggestion} />
 					}
 					{
 						detail.status === AGREED && <div>

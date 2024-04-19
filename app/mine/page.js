@@ -31,8 +31,8 @@ export default async function Page() {
 	}
 
 	const result = await response.json();
-	const sellList = result.data?.filter(item => isCurrentUser(token?.value, item?.owner?._id));
-	const bringList = result.data?.filter(item => isCurrentUser(token?.value, item?.buyer?._id));
+	const sellList = result.data?.filter(item => isCurrentUser(token?.value, item?.owner?._id) && item?.status !== 'FLUSHED');
+	const bringList = result.data?.filter(item => isCurrentUser(token?.value, item?.buyer?._id) && item?.status !== 'FLUSHED');
 	return (
 		<div className="container">
 			<h2 className="my-6">These are pieces of crap that you have posted. As well as pieces of crap that you have expressed interest in owning.</h2>

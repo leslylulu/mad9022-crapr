@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
 import { suggestLocation } from '@/app/actions';
+import { useRouter } from 'next/navigation';
 
 export default function SuggestForm(props) {
 	const id = props.id;
+	const router = useRouter();
 	const [suggestion, setSuggestion] = useState(null);
 	const [code, setCode] = useState(null);
 	const [message, setMessage] = useState(null);
@@ -23,6 +25,7 @@ export default function SuggestForm(props) {
 			setSuggestion(response.result?.data?.suggestion);
 			const date = response.result?.data?.suggestion?.date;
 			setLocalDate(new Date(date));
+			router.refresh();
 		}
 	};
 

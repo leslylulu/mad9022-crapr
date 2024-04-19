@@ -1,9 +1,11 @@
 'use client';
 import { setFlush } from '@/app/actions';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function AgreeButton(props) {
 	const id = props.id;
+	const router = useRouter();
 	const suggestion = props.suggestion;
 	const [message, setMessage] = useState(null);
 	const date = new Date(suggestion.date);
@@ -41,7 +43,10 @@ export default function AgreeButton(props) {
 						data-twe-ripple-color="light"
 						onClick={async () => {
 							const response = await setFlush(id);
-							if (response) {
+							if (response?.status !== 200) {
+								setMessage(response?.message)
+							} else {
+								router.refresh();
 								setMessage('The item has been flushed away.')
 							}
 						}}

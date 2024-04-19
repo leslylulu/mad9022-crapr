@@ -80,15 +80,13 @@ export async function setAgree(id) {
 	} catch (err) {
 		return { status: response.status, message: "Failed to Agreed" }
 	}
-	return { status: response.status }
+	const result = await response.json();
+	return { status: response.status, result: result?.data?.suggestLocation }
 }
-
-
 
 export async function setDisAgree(id) {
 	'use server'
 	const token = await cookies().get('token');
-	// console.log("setInterested ==", id, token?.value);
 	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}/disagree`, {
 		method: 'POST',
 		headers: {
@@ -104,50 +102,50 @@ export async function setDisAgree(id) {
 	return { status: response.status }
 }
 
-
 export async function setFlush(id) {
 	'use server'
 	const token = await cookies().get('token');
-	const response = await fetch(`${NEXT_PAGE_URL}/api/flush`, {
+	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}/flush`, {
 		method: 'POST',
-		body: JSON.stringify({ id, token: token?.value }),
+		headers: {
+			authorization: 'Bearer ' + token?.value,
+		},
+		next: { revalidate: 0 },
 	});
-	if (!response.ok) {
-		console.log('flush failed', response.status);
-		return false
+	try {
+		if (!response.ok) throw new Error(JSON.stringify({ msg: "failed flushed", code: response.status }));
+	} catch (err) {
+		return { status: response.status, message: "Failed to Flush" }
 	}
-	const result = await response.json();
-	console.log("setAgree result", result);
-	return true;
+	return { status: response.status }
 }
 
 
 export async function suggestLocation(id, address, date, time) {
 	'use server'
-	console.log("suggestLocation", id, address, date, time);
 	const token = await cookies().get('token');
-	const response = await fetch(`${NEXT_PAGE_URL}/api/suggest`, {
+	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}/suggest`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token?.value}`,
 		},
 		body: JSON.stringify({
-			id,
-			token: token?.value,
-			address,
 			date,
 			time,
+			address,
 		}),
+		next: { revalidate: 0 },
 	});
-	if (!response.ok) {
+	try {
+		if (!response.ok) throw new Error(JSON.stringify({ msg: "failed Suggest", code: response.status }));
+	} catch (err) {
+		let errObj = JSON.parse(err.message);
 		return { status: response.status, message: response.statusText }
 	}
 	const result = await response.json();
 	return { status: response.status, result: result }
 }
-
-
-
 export async function login(response, token) {
 	//set the cookie
 	'use server'
@@ -159,27 +157,22 @@ export async function login(response, token) {
 		expires: expires,
 	});
 }
-
 export async function logout() {
 	'use server'
 	await cookies().set('token', '', { expires: new Date(0) });
 	redirect('/');
-
 }
 
 export async function getSession() {
-	//get the cookie
 	'use server'
-	const token = await cookies().get('token'); //token object
+	const token = await cookies().get('token');
 	if (!token) return null;
 	revalidatePath('/');
 	return token;
 }
 
 export async function updateSession(request) {
-	//refresh the cookie expiry because we navigated
 	const token = request.cookies.get('token')?.value;
-	//if we needed to extract a new token from search or headers we could do that here
 	if (!token) {
 		console.log('updateSession - no token cookie');
 		return
@@ -194,7 +187,6 @@ export async function updateSession(request) {
 	return resp;
 }
 
-// home page redirect to crap page
 export async function handleSearch(formData) {
 	'use server'
 	const keyword = formData.get('keyword');
