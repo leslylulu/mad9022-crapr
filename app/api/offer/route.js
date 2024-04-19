@@ -18,7 +18,6 @@ export async function POST(request) {
 	const crapData = await request.formData();
 	crapData.append('lat', latitude);
 	crapData.append('long', longitude);
-	console.log("checkpoint 444 ===", crapData);
 
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',

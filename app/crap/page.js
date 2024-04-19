@@ -26,7 +26,6 @@ export default async function Page({ params, searchParams }) {
 	});
 	const data = await response.json();
 	const list = data?.data;
-	console.log('page data =', data);
 	const myId = decodeToken(token?.value)?.payload?.id;
 
 	return (
