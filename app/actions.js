@@ -48,19 +48,20 @@ export async function handleDeleteCrap(id) {
 export async function setInterested(id) {
 	'use server'
 	const token = await cookies().get('token');
-	// console.log("setInterested ==", id, token?.value);
-	const response = await fetch(`${NEXT_PAGE_URL}/api/interested`, {
+	let response = await fetch(`${NEXT_API_URL}/api/crap/${id}/interested`, {
 		method: 'POST',
-		body: JSON.stringify({ id, token: token?.value }),
+		headers: {
+			authorization: 'Bearer ' + token?.value,
+		},
+		next: { revalidate: 0 },
 	});
-	// console.log("setInterested response", response);
-	if (!response.ok) {
-		console.log('delete failed', response.status);
-		return false
+	try {
+		if (!response.ok) throw new Error(JSON.stringify({ msg: "failed Suggest", code: response.status }));
+	} catch (err) {
+		console.log("setInterested error", err);
+		return { status: response.status, message: "Failed to set interested" }
 	}
-	const result = await response.json();
-	console.log("setInterested result", result);
-	return true;
+	return { status: response.status }
 }
 
 export async function setAgree(id) {

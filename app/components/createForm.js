@@ -22,7 +22,7 @@ export default function CreateForm() {
 			{
 				code && code !== 200 && <div className="text-red-700 bg-red-200 p-2 rounded-md mx-12 mb-2">{message} HTTP Code {code}</div>
 			}
-			<form className="max-w-lg mx-auto" onSubmit={handleCreate}>
+			<form className="max-w-lg mx-auto" onSubmit={handleCreate} >
 				<div className="mb-5">
 					<label className="block mb-2 text-md font-medium text-primary-dark ">Title</label>
 					<input type="text" name="title" className="bg-gray-50 border border-gray-300 text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="title" required />

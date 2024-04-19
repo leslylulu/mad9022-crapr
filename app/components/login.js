@@ -1,5 +1,3 @@
-// Login component
-// import { redirect } from 'next/navigation';
 import { handelLogin } from '@/app/actions';
 
 export default function Login() {
@@ -13,7 +11,6 @@ export default function Login() {
         </svg>
         Sign in with Google
       </button>
-      {/* <button className="text-white bg-blue-700 px-6 py-3 mt-12 rounded-md bg-primary-dark">LogIn With Google</button> */}
     </form>
   );
 

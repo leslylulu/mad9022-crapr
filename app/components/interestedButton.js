@@ -1,10 +1,13 @@
 'use client';
 import { setInterested } from '@/app/actions';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function InterestedButton(props) {
+	const router = useRouter();
 	const id = props.id;
 	const [message, setMessage] = useState(null);
+	const [code, setCode] = useState(null);
 
 	return (
 		<div className="mt-2">
@@ -21,7 +24,12 @@ export default function InterestedButton(props) {
 					data-twe-ripple-color="light"
 					onClick={async () => {
 						const response = await setInterested(id);
-						if (response) {
+						if (response?.status !== 200) {
+							setCode(response?.status);
+							setMessage(response?.message)
+						}
+						else {
+							router.refresh()
 							setMessage('Waiting for a response from the seller.')
 						}
 					}}
