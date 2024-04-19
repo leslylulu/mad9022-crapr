@@ -15,9 +15,6 @@ export async function handelLogin() {
 export async function createCrap(fd) {
 	'use server'
 	const token = await cookies().get('token');
-	const { LATITUDE, LONGITUDE } = process.env;
-	fd.append('lat', LATITUDE);
-	fd.append('long', LONGITUDE);
 	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
 		method: 'POST',
 		headers: {
@@ -28,7 +25,8 @@ export async function createCrap(fd) {
 		body: fd,
 	});
 	if (!response.ok) {
-		console.log('createCrap failed', response.status);
+		console.log('create failed', response.ok);
+		return { status: response.status, message: "Failed Create Crap" }
 	} else {
 		redirect('/mine');
 	}
