@@ -32,7 +32,7 @@ export default async function Page() {
 				{
 					sellList && sellList.length > 0 && sellList.map((crap, index) => {
 						return (
-							<CrapCard crap={crap} key={index} />
+							<CrapCard crap={crap} key={index} isMine={true} />
 						)
 					})
 				}
@@ -42,7 +42,7 @@ export default async function Page() {
 				{
 					bringList && bringList.length > 0 && bringList.map((crap, index) => {
 						return (
-							<CrapCard crap={crap} key={index} />
+							<CrapCard crap={crap} key={index} isMine={false} />
 						)
 					})
 				}

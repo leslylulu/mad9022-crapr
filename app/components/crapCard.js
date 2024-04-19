@@ -5,6 +5,7 @@ import Link from 'next/link';
 export default function CrapCard(props) {
 	const crap = props.crap;
 	const { NEXT_PAGE_URL } = process.env;
+	const isMine = props.isMine;
 
 	return (
 		<Link href={`${NEXT_PAGE_URL}/crap/${crap._id}`} className="flex my-3 flex-col gap-3 border border-w-2 text-white bg-primary-light">
@@ -13,7 +14,8 @@ export default function CrapCard(props) {
 					<h4>{crap.title}</h4>
 					<p className="p-3 rounded-md text-purple-300">{crap.status}</p>
 				</div>
-				{crap.status !== 'AVAILABLE' && <p className="text-primary-dark text-center">🔥🔥🔥 Action Required 🔥🔥🔥</p>}
+				{(isMine && crap.status == 'INTERESTED' || isMine && crap.status == 'AGREED') && <p className="text-primary-dark text-center">🔥🔥🔥 Action Required 🔥🔥🔥</p>}
+				{!isMine && crap.status == 'SCHEDULED' && <p className="text-primary-dark text-center">🔥🔥🔥 Action Required 🔥🔥🔥</p>}
 				<p className="text-primary-dark px-2 pt-3">{crap.description}</p>
 			</div>
 			<div className="flex bg-primary-light flex-col">

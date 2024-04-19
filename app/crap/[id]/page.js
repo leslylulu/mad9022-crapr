@@ -9,6 +9,11 @@ import Image from 'next/image';
 import jwt from 'jsonwebtoken';
 
 const { NEXT_PAGE_URL } = process.env;
+const AVAILABLE = 'AVAILABLE';
+const INTERESTED = 'INTERESTED';
+const SCHEDULED = 'SCHEDULED';
+const AGREED = 'AGREED';
+const FLUSHED = 'FLUSHED';
 
 const isCurrentUser = (token, id) => {
 	try {
@@ -32,14 +37,8 @@ const Page = async ({ params, searchParams }) => {
 	});
 	const result = await response.json();
 	const detail = result?.data;
-	// console.log('detail =', detail);
 	const isOwner = isCurrentUser(token?.value, detail?.owner._id);
-	// console.log('isOwner =', isOwner);
-	const AVAILABLE = 'AVAILABLE';
-	const INTERESTED = 'INTERESTED';
-	const SCHEDULED = 'SCHEDULED';
-	const AGREED = 'AGREED';
-	const FLUSHED = 'FLUSHED';
+
 	const date = detail?.suggestion?.date ? new Date(detail?.suggestion?.date) : '';
 	const localDate = date ? date.toLocaleDateString() : '';
 
