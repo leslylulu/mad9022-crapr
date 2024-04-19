@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { getSession } from '@/app/actions';
+import LogoutButton from '@/app/components/logoutButton';
 
-export default async function NavBar(props) {
+
+export default async function NavBar() {
   let token = await getSession();
-
   return (
     <nav className="mt-6 w-full flex gap-3 justify-center">
       <Link href="/" className="text-md bg-primary-dark text-white p-3 rounded-md">
@@ -20,9 +21,7 @@ export default async function NavBar(props) {
           <Link href="/wiped" className="text-md bg-primary-dark text-white p-3 rounded-md">
             Wiped
           </Link>
-          <Link href="/" className="text-md bg-primary-dark text-white p-3 rounded-md">
-            Logout
-          </Link>
+          <LogoutButton />
         </>
       )}
     </nav>

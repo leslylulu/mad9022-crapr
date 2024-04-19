@@ -159,9 +159,10 @@ export async function login(response, token) {
 }
 
 export async function logout() {
-	//clear the cookie
-	// await cookies().delete('token');
-	// await cookies().set('token', '', { expires: new Date(0) });
+	'use server'
+	await cookies().set('token', '', { expires: new Date(0) });
+	redirect('/');
+
 }
 
 export async function getSession() {
