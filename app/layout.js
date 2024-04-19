@@ -1,5 +1,6 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import "./globalicons.css";
 import NavBar from "@/app/components/navbar";
 
 
@@ -19,7 +20,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={poppins.className}>
         <header className="flex items-center flex-col">
-          <h1 className="text-4xl font-bold">Crapr</h1>
+          <h1 className="text-4xl font-bold my-12">Crapr</h1>
           <p className="text-xl">Get rid of your crap now</p>
           <NavBar />
         </header>

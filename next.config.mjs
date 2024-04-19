@@ -8,6 +8,13 @@ const nextConfig = {
 				port: '',
 				pathname: '/w2024-final/**',
 			},
+			// TODO: test url from Eddie w2024-310-final-eddie delete it later
+			{
+				protocol: 'https',
+				hostname: 'storage.googleapis.com',
+				port: '',
+				pathname: '/w2024-310-final-eddie/**',
+			}
 		],
 	}
 };

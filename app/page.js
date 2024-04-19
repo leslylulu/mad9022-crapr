@@ -1,14 +1,9 @@
-// import { GetServerSideProps } from 'next';
-// import Image from "next/image";
-import NavBar from "@/app/components/navbar";
 import Login from "@/app/components/login";
 import { getSession, handleSearch } from '@/app/actions';
-import { cookies } from 'next/headers';
 
 
 export default async function Home() {
   let token = await getSession();
-  //called from server-side can accept a return value
   return (
     <main className="flex min-h-screen flex-col items-center py-12">
       <section className="mt-12 w-full flex justify-center">
@@ -16,9 +11,9 @@ export default async function Home() {
           token?.value ? <div className="px-24">
             <form className="w-[1/2] mx-auto flex flex-col" action={handleSearch}>
               <div className="mb-6">
-                <label className="block mb-2 text-md font-medium text-primary-dark">Search for some Crap:</label>
+                <label className="block mb-2 text-md font-medium text-primary-dark dark">Search for some Crap</label>
                 <input placeholder="keyword" type="text" name="keyword" className="bg-white border border-primary-dark text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                <p className="text-sm text-cyan-700">Leave form blank to match everything within the indicated distance.</p>
+                <p className="text-sm text-purple-700 font-bold">Leave form blank to match everything within the indicated distance.</p>
               </div>
               <label className="block mb-2 text-md font-medium text-primary-dark ">Select an option</label>
               <select defaultValue="30000" name="distance" className="bg-white border border-primary-dark text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">

@@ -37,16 +37,21 @@ export default async function Page({ params, searchParams }) {
 					<span className="font-bold mx-2">{list.length > 0 ? list.length : '0'}</span>
 					<span className="text-yellow-500 mx-2 font-bold">AVAILABLE</span> matches  {keyword ? 'for ' + keyword : 'in ' + distance + 'm'}</h2>
 			</div>
-			<div className="w-full p-3 flex flex-col gap-3">
+			<div className="w-full p-3 flex flex-col gap-3 container">
 				{
 					list && list.length > 0 && list.map(item => {
 						return (
-							<Link key={item._id} href={`/crap/${item._id}`} className="bg-primary-dark text-white rounded-md w-full p-3">
-								<h3 className="text-xl uppercase">{item.title}</h3>
-								<p>{item.description}</p>
-								{
-									item.owner._id == myId && <p className="text-yellow-400 font-bold">This is your own crap</p>
-								}
+							<Link key={item._id} href={`/crap/${item._id}`} className="bg-primary-dark text-white rounded-md w-full p-3 flex justify-between items-center">
+								<div>
+									<h3 className="text-xl uppercase">{item.title}</h3>
+									<p>{item.description}</p>
+									{
+										item.owner._id == myId && <p className="text-yellow-400 font-bold">This is your own crap</p>
+									}
+								</div>
+								<span className="material-symbols-outlined text-xl">
+									chevron_right
+								</span>
 							</Link>
 						)
 					})
