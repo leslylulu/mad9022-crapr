@@ -6,7 +6,7 @@ import SuggestForm from '@/app/components/suggestForm';
 import AgreeButton from '@/app/components/agreeButton';
 import FlushButton from '@/app/components/flushButton';
 import Image from 'next/image';
-import jwt from 'jsonwebtoken';
+import isCurrentUser from '@/app/utils';
 
 const { NEXT_PAGE_URL } = process.env;
 const AVAILABLE = 'AVAILABLE';
@@ -15,18 +15,6 @@ const SCHEDULED = 'SCHEDULED';
 const AGREED = 'AGREED';
 const FLUSHED = 'FLUSHED';
 
-const isCurrentUser = (token, id) => {
-	try {
-		const decoded = jwt.decode(token, { complete: true });
-		if (decoded?.payload?.id === id) {
-			return true;
-		}
-		return false;
-	} catch (error) {
-		console.error('Error decoding token:', error);
-		return false;
-	}
-};
 
 const Page = async ({ params, searchParams }) => {
 

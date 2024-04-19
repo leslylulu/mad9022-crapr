@@ -1,19 +1,6 @@
 import { getSession } from '@/app/actions';
-import jwt from 'jsonwebtoken';
 import CrapCard from '@/app/components/crapCard';
-
-const isCurrentUser = (token, id) => {
-	try {
-		const decoded = jwt.decode(token, { complete: true });
-		if (decoded?.payload?.id === id) {
-			return true;
-		}
-		return false;
-	} catch (error) {
-		console.error('Error decoding token:', error);
-		return false;
-	}
-};
+import isCurrentUser from '@/app/utils';
 
 export default async function Page() {
 	const { NEXT_PAGE_URL } = process.env;
