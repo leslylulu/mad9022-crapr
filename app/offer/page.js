@@ -1,4 +1,3 @@
-export const revalidate = false; // means cache forever
 import CreateForm from '@/app/components/createForm';
 
 export default async function Page() {

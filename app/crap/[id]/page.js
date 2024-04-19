@@ -1,4 +1,4 @@
-import React from 'react'
+export const revalidate = 0;
 import { getSession } from '@/app/actions';
 import DeleteButton from '@/app/components/deleteButton';
 import InterestedButton from '@/app/components/interestedButton';
@@ -29,12 +29,29 @@ const isCurrentUser = (token, id) => {
 };
 
 const Page = async ({ params, searchParams }) => {
-	const { id } = params;
 
+	const { id } = params;
 	const token = await getSession();
 	const response = await fetch(`${NEXT_PAGE_URL}/api/crapDetail?token=${token?.value}&id=${id}`, {
 		method: 'GET',
 	});
+	try {
+		if (!response.ok) throw new Error(JSON.stringify({ msg: "Failed View Crap Detail", code: response.status }));
+	} catch (err) {
+		let errObj = JSON.parse(err.message);
+		return <div className="flex flex-col items-center my-9 container gap-3 w-full">
+			<p className="bg-red-200 text-red-800 p-3 rounded-md">Failed to fetch data HTTP code : {errObj.code}</p>
+			<p className="flex items-center bg-primary-dark gap-3 p-3 text-white rounded-lg">
+				<span className="material-symbols-outlined">
+					home
+				</span>
+				<a href="/">
+					Go back to the home page.
+				</a>
+			</p>
+		</div>
+	}
+
 	const result = await response.json();
 	const detail = result?.data;
 	const isOwner = isCurrentUser(token?.value, detail?.owner._id);

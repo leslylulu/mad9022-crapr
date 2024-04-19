@@ -20,10 +20,11 @@ export async function GET(request) {
 		},
 		next: { revalidate: 0 },
 	});
-	if (!resp.ok) {
-		return new Response('Bad Stuff happened', {
-			status: 500,
-		});
+	try {
+		if (!resp.ok) throw new Error(JSON.stringify({ msg: "failed Suggest", code: response.status }));
+	} catch (err) {
+		let errObj = JSON.parse(err.message);
+		return new Response(err.message, { status: errObj.code, headers: { 'content-type': 'application/json' } });
 	}
 	const data = await resp.json();
 	return new Response(JSON.stringify(data), {

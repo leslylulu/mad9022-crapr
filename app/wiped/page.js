@@ -2,6 +2,7 @@ import { getSession } from "@/app/actions";
 import CrapCard from "@/app/components/crapCard";
 
 export default async function Page() {
+
   const { NEXT_PAGE_URL } = process.env;
   const token = await getSession();
   const response = await fetch(
