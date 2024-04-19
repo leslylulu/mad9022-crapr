@@ -14,7 +14,7 @@ export default function CrapCard(props) {
 					<p className="p-3 rounded-md text-purple-300">{crap.status}</p>
 				</div>
 				{crap.status !== 'AVAILABLE' && <p className="text-primary-dark text-center">🔥🔥🔥 Action Required 🔥🔥🔥</p>}
-				<p className="text-primary-dark px-2 pt-3">"{crap.description}"</p>
+				<p className="text-primary-dark px-2 pt-3">{crap.description}</p>
 			</div>
 			<div className="flex bg-primary-light flex-col">
 				{
