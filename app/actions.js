@@ -35,8 +35,13 @@ export async function createCrap(fd) {
 export async function handleDeleteCrap(id) {
 	'use server'
 	const token = await cookies().get('token');
-	const response = await fetch(`${NEXT_PAGE_URL}/api/crap?token=${token?.value}&id=${id}`, {
+	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}`, {
 		method: 'DELETE',
+		headers: {
+			accept: 'application/json',
+			authorization: 'Bearer ' + token?.value,
+		},
+		next: { revalidate: 0 },
 	});
 	if (!response.ok) {
 		console.log('delete failed', response.status);
@@ -105,6 +110,7 @@ export async function setDisAgree(id) {
 export async function setFlush(id) {
 	'use server'
 	const token = await cookies().get('token');
+
 	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}/flush`, {
 		method: 'POST',
 		headers: {
