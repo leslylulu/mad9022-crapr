@@ -94,7 +94,7 @@ const Page = async ({ params, searchParams }) => {
 					<div className="p-3">
 						<p className="mb-3">{detail.description}</p>
 						{
-							detail.images.length > 0 ? <div className="flex gap-2 relative flex-col lg:flex-row">
+							detail.images.length > 0 ? <div className="flex gap-2 relative flex-col ">
 								{
 									detail.images.map(item => {
 										return (
