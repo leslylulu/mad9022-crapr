@@ -2,15 +2,16 @@ import { getSession } from "@/app/actions";
 import CrapCard from "@/app/components/crapCard";
 
 export default async function Page() {
-
-  const { NEXT_PAGE_URL } = process.env;
+  const { NEXT_API_URL } = process.env;
   const token = await getSession();
-  const response = await fetch(
-    `${NEXT_PAGE_URL}/api/mine?token=${token?.value}`,
-    {
-      method: "GET",
-    }
-  );
+  const response = await fetch(`${NEXT_API_URL}/api/crap/mine`, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      authorization: 'Bearer ' + token?.value,
+    },
+    next: { revalidate: 0 },
+  });
   const result = await response.json();
   const flushedList = result.data?.filter((item) => item.status === "FLUSHED");
   return (
