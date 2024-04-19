@@ -1,7 +1,7 @@
 export const revalidate = 0
 export const dynamic = 'force-dynamic';
 export const runtime = 'edge'; // 'nodejs' is the default
-export const preferredRegion = ['iad1'];
+export const preferredRegion = ['cle1'];
 
 
 const { NEXT_API_URL } = process.env;
