@@ -23,7 +23,6 @@ export default function CrapCard(props) {
 							<Image
 								width={100}
 								height={100}
-								objectFit='cover'
 								key={index}
 								src={image}
 								alt="crap"

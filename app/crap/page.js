@@ -28,7 +28,6 @@ export default async function Page({ params, searchParams }) {
 	const list = data?.data;
 	console.log('page data =', data);
 	const myId = decodeToken(token?.value)?.payload?.id;
-	// console.log('myId =', myId);
 
 	return (
 		<main className="flex min-h-screen flex-col items-center py-12">

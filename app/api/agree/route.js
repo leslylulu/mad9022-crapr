@@ -8,7 +8,6 @@ const { NEXT_API_URL } = process.env;
 export async function POST(request) {
 
 	const agreeCrap = await request.json();
-	console.log("agreeCrap", agreeCrap);
 	const token = agreeCrap.token;
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated

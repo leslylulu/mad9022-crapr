@@ -6,18 +6,29 @@ export default function AgreeButton(props) {
 	const id = props.id;
 	const suggestion = props.suggestion;
 	const [message, setMessage] = useState(null);
+	const date = new Date(suggestion.date);
 
 	return (
 		<div className="mt-2">
 			{
 				message && <p className="text-primary-dark">{message}</p>
 			}
-
 			{
 				!message && <div>
-					<p>Address: {suggestion.address}</p>
-					<p>Date: {suggestion.date}</p>
-					<p>Time: {suggestion.time}</p>
+					<div className="bg-white p-3 rounded-lg text-black">
+						<p>
+							<span className="font-bold">Address:</span>
+							<span className="ml-2">{suggestion.address}</span>
+						</p>
+						<p>
+							<span className="font-bold">Date:</span>
+							<span className="ml-2">{date.toLocaleDateString()}</span>
+						</p>
+						<p>
+							<span className="font-bold">Time:</span>
+							<span className="ml-2">{suggestion.time}</span>
+						</p>
+					</div>
 					<div className="flex gap-3">
 						<button
 							type="button"

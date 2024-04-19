@@ -18,7 +18,6 @@ export async function createCrap(fd) {
 	const { LATITUDE, LONGITUDE } = process.env;
 	fd.append('lat', LATITUDE);
 	fd.append('long', LONGITUDE);
-	console.log("createCrap fd", fd);
 	const response = await fetch(`${NEXT_PAGE_URL}/api/offer`, {
 		method: 'POST',
 		headers: {

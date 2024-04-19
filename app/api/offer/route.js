@@ -9,15 +9,14 @@ export async function POST(request) {
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	console.log("checkpoint create token", token);
 	const latitude = request?.geo?.latitude || process.env.LATITUDE;
 	const longitude = request?.geo?.longitude || process.env.LONGITUDE;
-	console.log("geo ===", latitude, longitude);
+	// console.log("geo ===", latitude, longitude);
 	// console.log("checkpoint 111 ===", request);
 	// console.log("checkpoint 222 ===", request?.formData);
 	// console.log("checkpoint 333 ===", await request?.formData());
 	const crapData = await request.formData();
-	console.log("checkpoint 444 ===", crapData);
+	// console.log("checkpoint 444 ===", crapData);
 
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
