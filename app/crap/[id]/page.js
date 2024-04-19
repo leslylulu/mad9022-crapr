@@ -32,15 +32,16 @@ const Page = async ({ params, searchParams }) => {
 	});
 	const result = await response.json();
 	const detail = result?.data;
-	console.log('detail =', detail);
+	// console.log('detail =', detail);
 	const isOwner = isCurrentUser(token?.value, detail?.owner._id);
-	console.log('isOwner =', isOwner);
+	// console.log('isOwner =', isOwner);
 	const AVAILABLE = 'AVAILABLE';
 	const INTERESTED = 'INTERESTED';
 	const SCHEDULED = 'SCHEDULED';
 	const AGREED = 'AGREED';
 	const FLUSHED = 'FLUSHED';
-	console.log('detail.status =', detail);
+	const date = detail?.suggestion?.date ? new Date(detail?.suggestion?.date) : '';
+	const localDate = date ? date.toLocaleDateString() : '';
 
 	return (
 		<div className="container">
@@ -51,6 +52,24 @@ const Page = async ({ params, searchParams }) => {
 					}
 					{
 						detail.status === INTERESTED && <SuggestForm id={detail._id} />
+					}
+					{
+						detail.status === SCHEDULED && <div>
+							<div className="bg-white p-3 rounded-lg text-black border-primary-dark border">
+								<p>
+									<span className="font-bold">Address:</span>
+									<span className="ml-2">{detail?.suggestion?.address}</span>
+								</p>
+								<p>
+									<span className="font-bold">Date:</span>
+									<span className="ml-2">{localDate}</span>
+								</p>
+								<p>
+									<span className="font-bold">Time:</span>
+									<span className="ml-2">{detail?.suggestion?.time}</span>
+								</p>
+							</div>
+						</div>
 					}
 					{
 						detail.status === AGREED && <FlushButton id={detail._id} suggestion={detail.suggestion} />
@@ -74,9 +93,20 @@ const Page = async ({ params, searchParams }) => {
 					{
 						detail.status === AGREED && <div>
 							<p>The owner is waiting for you to come and take this item away.</p>
-							<p>{detail.suggestion.address}</p>
-							<p>{detail.suggestion.date}</p>
-							<p>{detail.suggestion.time}</p>
+							<div className="bg-white p-3 rounded-lg text-black border-primary-dark border">
+								<p>
+									<span className="font-bold">Address:</span>
+									<span className="ml-2">{detail?.suggestion?.address}</span>
+								</p>
+								<p>
+									<span className="font-bold">Date:</span>
+									<span className="ml-2">{localDate}</span>
+								</p>
+								<p>
+									<span className="font-bold">Time:</span>
+									<span className="ml-2">{detail?.suggestion?.time}</span>
+								</p>
+							</div>
 						</div>
 					}
 					{
@@ -94,7 +124,7 @@ const Page = async ({ params, searchParams }) => {
 					<div className="p-3">
 						<p className="mb-3">{detail.description}</p>
 						{
-							detail.images.length > 0 ? <div className="flex gap-2 relative flex-col lg:flex-row">
+							detail.images.length > 0 ? <div className="flex gap-2 relative flex-col ">
 								{
 									detail.images.map(item => {
 										return (

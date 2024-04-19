@@ -7,8 +7,11 @@ export default async function NavBar() {
   let token = await getSession();
   return (
     <nav className="mt-6 w-full flex gap-3 justify-center">
-      <Link href="/" className="text-md bg-primary-dark text-white p-3 rounded-md">
+      <Link href="/" className="text-md bg-primary-dark text-white p-3 rounded-md flex items-center">
         Search
+        <span className="material-symbols-outlined ml-2">
+          search
+        </span>
       </Link>
       {token?.value && (
         <>

@@ -1,21 +1,18 @@
-export const runtime = 'edge'; // 'nodejs' is the default
-// execute this function on iad1 or hnd1, based on the connecting client location
-export const preferredRegion = ['iad1', 'hnd1'];
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
+
 const { NEXT_API_URL } = process.env;
 
+export async function GET(request) {
 
-export async function POST(request) {
-
-	const agreeCrap = await request.json();
-	const token = agreeCrap.token;
+	const url = new URL(request.url);
+	const token = url.searchParams.get('token');
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	const id = agreeCrap.id;
-	let resp = await fetch(`${NEXT_API_URL}/api/crap/${id}/agree`, {
-		method: 'POST',
+	let resp = await fetch(`${NEXT_API_URL}/api/crap/mine`, {
+		method: 'GET',
 		headers: {
+			accept: 'application/json',
 			authorization: 'Bearer ' + token,
 		},
 		next: { revalidate: 0 },
@@ -30,7 +27,10 @@ export async function POST(request) {
 		headers: {
 			'Set-Cookie': `token=${token}`,
 			'content-type': 'application/json',
+			'access-control-allow-methods': 'GET',
 			'access-control-allow-origin': '*',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+			'Control-cache': 'max-age=0',
 		},
 		status: 200,
 	});
