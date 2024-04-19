@@ -1,5 +1,8 @@
 export const revalidate = 0
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge'; // 'nodejs' is the default
+export const preferredRegion = ['iad1'];
+
 
 const { NEXT_API_URL } = process.env;
 
@@ -11,12 +14,11 @@ export async function POST(request) {
 	}
 	const latitude = request?.geo?.latitude || process.env.LATITUDE;
 	const longitude = request?.geo?.longitude || process.env.LONGITUDE;
-	// console.log("geo ===", latitude, longitude);
-	// console.log("checkpoint 111 ===", request);
-	// console.log("checkpoint 222 ===", request?.formData);
-	// console.log("checkpoint 333 ===", await request?.formData());
+
 	const crapData = await request.formData();
-	// console.log("checkpoint 444 ===", crapData);
+	crapData.append('lat', latitude);
+	crapData.append('long', longitude);
+	console.log("checkpoint 444 ===", crapData);
 
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
@@ -27,9 +29,13 @@ export async function POST(request) {
 		body: crapData
 	});
 
-	if (!resp.ok) {
-		return new Response('Bad Stuff happened', {
-			status: 500,
+	try {
+		if (!resp.ok) throw new Error(JSON.stringify({ msg: "failed Suggest", code: response.status }));
+	} catch (err) {
+		let errObj = JSON.parse(err.message);
+		return new Response('Failed Create Crap', {
+			status: errObj.code,
+			headers: { 'content-type': 'application/json' }
 		});
 	}
 	const data = await resp.json();
