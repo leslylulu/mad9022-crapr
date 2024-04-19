@@ -8,27 +8,30 @@ import FlushButton from '@/app/components/flushButton';
 import Image from 'next/image';
 import isCurrentUser from '@/app/utils';
 
-const { NEXT_PAGE_URL } = process.env;
+const { NEXT_API_URL } = process.env;
 const AVAILABLE = 'AVAILABLE';
 const INTERESTED = 'INTERESTED';
 const SCHEDULED = 'SCHEDULED';
 const AGREED = 'AGREED';
 const FLUSHED = 'FLUSHED';
 
-
-const Page = async ({ params, searchParams }) => {
-
+const Page = async ({ params }) => {
 	const { id } = params;
 	const token = await getSession();
-	const response = await fetch(`${NEXT_PAGE_URL}/api/crapDetail?token=${token?.value}&id=${id}`, {
+	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}?`, {
 		method: 'GET',
+		headers: {
+			accept: 'application/json',
+			authorization: 'Bearer ' + token?.value,
+		},
+		next: { revalidate: 0 },
 	});
 	try {
 		if (!response.ok) throw new Error(JSON.stringify({ msg: "Failed View Crap Detail", code: response.status }));
 	} catch (err) {
 		let errObj = JSON.parse(err.message);
 		return <div className="flex flex-col items-center my-9 container gap-3 w-full">
-			<p className="bg-red-200 text-red-800 p-3 rounded-md">Failed to fetch data HTTP code : {errObj.code}</p>
+			<p className="bg-red-200 text-red-800 p-3 rounded-md">Failed to View data HTTP code : {errObj.code}</p>
 			<p className="flex items-center bg-primary-dark gap-3 p-3 text-white rounded-lg">
 				<span className="material-symbols-outlined">
 					home
