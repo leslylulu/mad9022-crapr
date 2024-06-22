@@ -20,10 +20,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={poppins.className}>
         <header className="flex items-center flex-col">
-          <h1 className="text-4xl font-bold my-12">Recycle</h1>
-          <p>Online second-hand trading platform</p>
-          <p className="text-xl">Maximize resources
-          </p>
+          <div className="my-12 flex gap-12">
+            <h1 className="text-4xl font-bold ">Recycle</h1>
+            <div>
+              <p>Online second-hand trading platform</p>
+              <p className="text-xl">Maximize resources</p>
+            </div>
+          </div>
+
           <NavBar />
         </header>
         {children}

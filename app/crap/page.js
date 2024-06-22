@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { getSession } from '@/app/actions';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 const decodeToken = (token) => {
@@ -26,30 +27,38 @@ export default async function Page({ params, searchParams }) {
 	});
 	const data = await response.json();
 	const list = data?.data;
+	// console.log('list', list);
 	const myId = decodeToken(token?.value)?.payload?.id;
 
 	return (
 		<main className="flex min-h-screen flex-col items-center py-12">
 			<div className="w-full mt-6 px-12">
 				<h2 className="text-center text-xl">There are
-					<span className="font-bold mx-2">{list.length > 0 ? list.length : '0'}</span>
-					<span className="text-yellow-500 mx-2 font-bold">AVAILABLE</span> matches  {keyword ? 'for ' + keyword : 'in ' + distance + 'm'}</h2>
+					<span className="font-bold mx-2 text-2xl">{list.length > 0 ? list.length : '0'}</span>
+					<span className="text-yellow-500 mx-2 font-bold">AVAILABLE</span> matches for
+					<span className="font-bold text-2xl ml-3">{keyword ? keyword : ''}</span>
+				</h2>
 			</div>
 			<div className="w-full p-3 flex flex-col gap-3 container">
 				{
 					list && list.length > 0 && list.map(item => {
 						return (
-							<Link key={item._id} href={`/crap/${item._id}`} className="bg-primary-dark text-white rounded-md w-full p-3 flex justify-between items-center">
-								<div>
-									<h3 className="text-xl uppercase">{item.title}</h3>
-									<p>{item.description}</p>
-									{
-										item.owner._id == myId && <p className="text-yellow-400 font-bold">This is your own crap</p>
-									}
+							<Link key={item._id} href={`/crap/${item._id}`} className=" text-white rounded-md w-full p-3 flex justify-between items-center">
+								<div className='flex items-center gap-0 w-full'>
+									<Image width={200} height={200} alt="small picture" src={item.images[0]} className="h-80 w-1/2 object-cover rounded-l-lg shadow-2xl " />
+									<div className='flex items-center bg-primary-dark w-1/2 p-3 h-80 rounded-r-lg'>
+										<div>
+											<h3 className="text-xl uppercase mb-6">{item.title}</h3>
+											<p className='w-auto'>{item.description}</p>
+											{
+												item.owner._id == myId && <p className="text-yellow-400 font-bold">This is your own crap</p>
+											}
+										</div>
+										<span className="material-symbols-outlined text-xl ml-3">
+											chevron_right
+										</span>
+									</div>
 								</div>
-								<span className="material-symbols-outlined text-xl">
-									chevron_right
-								</span>
 							</Link>
 						)
 					})

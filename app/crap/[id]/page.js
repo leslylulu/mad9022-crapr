@@ -123,16 +123,10 @@ const Page = async ({ params }) => {
 				</div>
 			}
 			{
-				detail && <div className="bg-primary-dark text-white rounded-lg">
-					<h2 className="bg-yellow-200 p-3 text-primary-dark">
-						{detail.title}
-						<span className="mx-3">-</span>
-						<span>[{detail.status}]</span>
-					</h2>
-					<div className="p-3">
-						<p className="mb-3">{detail.description}</p>
+				detail && <div className="rounded-lg">
+					<div>
 						{
-							detail.images.length > 0 ? <div className="flex gap-2 relative flex-col ">
+							detail.images.length > 0 ? <div className="flex gap-0 relative shadow-2xl">
 								{
 									detail.images.map(item => {
 										return (
@@ -144,16 +138,25 @@ const Page = async ({ params }) => {
 												unoptimized={true}
 												alt={`${detail.title} image`}
 												src={item}
-												className="w-full h-full rounded-lg"
+												className="w-1/2 h-auto rounded-l-lg"
 											/>
 										)
 									})
 								}
+								<div className="w-1/2 flex flex-col rounded-r-lg justify-center bg-primary-dark text-white p-12">
+									<div className="flex items-center bg-yellow-200 px-6 py-2 rounded-md text-primary-dark">
+										<p className="text-lg">{detail.title}</p>
+										<span className="mx-3">-</span>
+										<span>[{detail.status}]</span>
+									</div>
+									<p className='mt-6'>{detail.description}</p>
+									{
+										isOwner && <DeleteButton id={detail._id} />
+									}
+								</div>
 							</div> : <span>no any Image</span>
 						}
-						{
-							isOwner && <DeleteButton id={detail._id} />
-						}
+
 					</div>
 
 				</div>
