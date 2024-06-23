@@ -56,7 +56,7 @@ const Page = async ({ params }) => {
 			{
 				isOwner && <h1 className="my-3">
 					{
-						detail.status === AVAILABLE && <p>Still waiting for some sucker to express interest in your crap.</p>
+						detail.status === AVAILABLE && <p>Still waiting for a buyer to express interest in your used item.</p>
 					}
 					{
 						detail.status === INTERESTED && <SuggestForm id={detail._id} />
