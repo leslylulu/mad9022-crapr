@@ -2,49 +2,23 @@ import { NextResponse } from 'next/server';
 import { updateSession, login } from '@/app/actions';
 
 export async function middleware(request) {
-
-  //code here runs for every page listed in the config object
+  // Update session if token exists (but don't block any routes)
   let response = await updateSession(request);
-  //updateSession function in actions
 
-  if (request.nextUrl.pathname === '/login') {
+  // For login page with token parameter
+  if (request.nextUrl.pathname === '/login' && request.nextUrl.searchParams.has('token')) {
     if (!response) {
-      response = NextResponse.next(); //the response object that will contain layout.js and page.js
+      response = NextResponse.next();
     }
-    if (request.nextUrl.searchParams.has('token')) {
-      await login(response, request.nextUrl.searchParams.get('token')); //function from actions.js
-    }
-    return response;
-  }
-  if (request.nextUrl.pathname === '/') {
-    //what do you want to do on the home page
-    if (!response) {
-      response = NextResponse.next(); //the response object that will contain layout.js and page.js
-    }
-    return response;
-  }
-  // return response;
-  if (request.nextUrl.pathname.startsWith('/crap')) {
-    if (!response) {
-      response = NextResponse.next(); //the response object that will contain layout.js and page.js
-    }
-    if (!request.cookies.has('token')) {
-      return NextResponse.redirect(request.nextUrl.origin);
-    }
-    return response;
-  }
-  if (request.nextUrl.pathname.startsWith('/offer') || request.nextUrl.pathname.startsWith('/mine') || request.nextUrl.pathname.startsWith('/wiped')) {
-    if (!response) {
-      response = NextResponse.next(); //the response object that will contain layout.js and page.js
-    }
-    if (!request.cookies.has('token')) {
-      return NextResponse.redirect(request.nextUrl.origin);
-    }
+    await login(response, request.nextUrl.searchParams.get('token'));
     return response;
   }
 
+  // Default behavior: allow access to everything
+  return response || NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/', '/login', '/crap', '/offer', '/mine', '/wiped'],
+  // Only match login page for token handling, let everything else through
+  matcher: ['/login'],
 };

@@ -1,8 +1,7 @@
 import { Poppins } from "next/font/google";
+import PageHeader from "@/app/components/pageHeader";
 import "./globals.css";
 import "./globalicons.css";
-import NavBar from "@/app/components/navbar";
-
 
 const poppins = Poppins({
   weight: '400',
@@ -11,26 +10,18 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Crap",
-  description: "Get rid of your crap now",
+  title: "Recycle",
+  description: "Online second-hand trading platform",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <header className="flex items-center flex-col">
-          <div className="my-12 flex gap-12">
-            <h1 className="text-4xl font-bold ">Recycle</h1>
-            <div>
-              <p>Online second-hand trading platform</p>
-              <p className="text-xl">Maximize resources</p>
-            </div>
-          </div>
-
-          <NavBar />
-        </header>
-        {children}
+        <PageHeader />
+        <main className="pt-40 pb-12">
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -10,12 +10,12 @@ module.exports = {
   theme: {
     colors: {
       primary: {
-        light: "#ADBC9F",
-        DEFAULT: "#436850",
-        dark: "#12372A",
+        light: "#FFF7D1",
+        DEFAULT: "#6A42C2",
+        dark: "#563A9C",
       },
       secondary: {
-        DEFAULT: "#FBFADA",
+        DEFAULT: "#F8F4E1",
       },
       ...colors,
       white: "#fff",

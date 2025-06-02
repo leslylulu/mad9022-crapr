@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --foreground-color: #e8f3dd;
-  --background-color: #000;
+  --foreground-color: #000;
+  --background-color: #f6faf1 ;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-color: #000;
-    --background-color: #e8f3dd;
+    --foreground-color: #f6faf1 ;
+    --background-color: #000;
   }
 }
 
@@ -24,4 +24,8 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
