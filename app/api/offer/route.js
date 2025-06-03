@@ -3,21 +3,35 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'edge'; // 'nodejs' is the default
 export const preferredRegion = ['cle1'];
 
-
 const { NEXT_API_URL } = process.env;
 
 export async function POST(request) {
-
 	const token = request.headers.get('authorization');
 	if (!token) {
 		return new Response(null, { status: 401 }) // User is not authenticated
 	}
-	const latitude = request?.geo?.latitude || process.env.LATITUDE;
-	const longitude = request?.geo?.longitude || process.env.LONGITUDE;
 
+	// Get the form data from the request
 	const crapData = await request.formData();
-	crapData.append('lat', latitude);
-	crapData.append('long', longitude);
+
+	// Check if lat and long are already in the form data
+	const hasLat = crapData.has('lat');
+	const hasLong = crapData.has('long');
+
+	// Only use default values if coordinates aren't provided in the form
+	if (!hasLat || !hasLong) {
+		// Use fallback values from env if needed
+		const defaultLat = process.env.LATITUDE || '45.4215';
+		const defaultLong = process.env.LONGITUDE || '-75.6972';
+
+		// Only set these if they don't already exist in the form data
+		if (!hasLat) {
+			crapData.append('lat', defaultLat);
+		}
+		if (!hasLong) {
+			crapData.append('long', defaultLong);
+		}
+	}
 
 	let resp = await fetch(`${NEXT_API_URL}/api/crap`, {
 		method: 'POST',
@@ -29,7 +43,7 @@ export async function POST(request) {
 	});
 
 	try {
-		if (!resp.ok) throw new Error(JSON.stringify({ msg: "failed Suggest", code: response.status }));
+		if (!resp.ok) throw new Error(JSON.stringify({ msg: "failed Suggest", code: resp.status }));
 	} catch (err) {
 		let errObj = JSON.parse(err.message);
 		return new Response('Failed Create Crap', {
@@ -37,6 +51,7 @@ export async function POST(request) {
 			headers: { 'content-type': 'application/json' }
 		});
 	}
+
 	const data = await resp.json();
 	return new Response(JSON.stringify(data), {
 		headers: {

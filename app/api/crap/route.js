@@ -7,14 +7,16 @@ const { NEXT_API_URL } = process.env;
 
 export async function GET(request) {
   const url = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const token = url.searchParams.get('token');
   const distance = url.searchParams.get('distance');
   const keyword = url.searchParams.has('keyword') ? url.searchParams.get('keyword'): undefined;
 
-  const latitude = request.geo?.latitude || process.env.LATITUDE;
-  const longitude = request.geo?.longitude || process.env.LONGITUDE;
+  const latitude = searchParams.get('lat');
+  const longitude = searchParams.get('lat');
   
   // Allow public browsing without token
+  console.log("data === ", keyword, distance, latitude, longitude)
   let resp = await fetch(`${NEXT_API_URL}/api/crap?query=${keyword ? keyword : ''}${distance ? '&distance=' + distance : ''}${latitude ? "&lat=" + latitude : ''}${longitude ? "&long=" + longitude : ''}`, {
     method: 'GET',
     headers: {

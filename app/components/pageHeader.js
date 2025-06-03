@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import LinkButton from "@/app/components/LinkButton";
+import LinkButton from "@/app/components/linkButton";
 
 export default function PageHeader() {
   const [scrolled, setScrolled] = useState(false);

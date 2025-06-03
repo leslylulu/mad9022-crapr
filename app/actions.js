@@ -28,7 +28,69 @@ export async function createCrap(fd) {
 		console.log('create failed', response.ok);
 		return { status: response.status, message: "Failed Create Crap" }
 	} else {
-		redirect('/mine');
+		// redirect('/mine');
+	}
+}
+
+
+
+export async function getAllCrapItems({ keyword, lat, long, distance }) {
+	'use server'
+	try {
+		// 直接构建指向后端API的URL
+		let url = `${process.env.NEXT_API_URL}/api/crap?`;
+
+		// 添加查询参数 - 注意：后端API使用'query'而不是'keyword'
+		if (keyword) {
+			url += `query=${encodeURIComponent(keyword)}&`;
+		}
+
+		if (lat && long) {
+			url += `lat=${lat}&long=${long}&`;
+		}
+
+		if (distance) {
+			url += `distance=${distance}&`;
+		}
+
+		// 移除URL末尾可能的&符号
+		url = url.replace(/&$/, '');
+
+		console.log('Calling backend API directly:', url);
+
+		// 获取token以进行认证
+		const token = await cookies().get('token');
+
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				// 只有在token存在时添加认证头
+				...(token?.value && { 'Authorization': `Bearer ${token.value}` }),
+			},
+			next: { revalidate: 0 },
+			cache: 'no-store'
+		});
+
+		if (!response.ok) {
+			throw new Error(`API response error: ${response.status}`);
+		}
+
+		const data = await response.json();
+		console.log('Backend API response data:', data);
+
+		return {
+			data: data.data || [],
+			error: null
+		};
+
+	} catch (error) {
+		console.error("Failed to fetch crap items:", error);
+		return {
+			data: [],
+			error: 'Failed to fetch items. Please try again later.'
+		};
 	}
 }
 
@@ -152,6 +214,8 @@ export async function suggestLocation(id, address, date, time) {
 	const result = await response.json();
 	return { status: response.status, result: result }
 }
+
+
 export async function login(response, token) {
 	//set the cookie
 	'use server'
@@ -170,11 +234,16 @@ export async function logout() {
 }
 
 export async function getSession() {
-	'use server'
-	const token = await cookies().get('token');
-	if (!token) return null;
-	revalidatePath('/');
-	return token;
+  'use server'
+  try {
+    const cookieStore = cookies();
+    const token = cookieStore?.get('token');
+    if (!token) return null;
+    return token;
+  } catch (error) {
+    console.error('Error getting session:', error);
+    return null;
+  }
 }
 
 export async function updateSession(request) {

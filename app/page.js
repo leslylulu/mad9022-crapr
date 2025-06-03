@@ -1,30 +1,54 @@
-import Login from "@/app/components/login";
-import {  handleSearch } from '@/app/actions';
+import CrapList from "@/app/components/crapList";
+import CrapSearch from "@/app/components/crapSearch";
+import { getAllCrapItems } from "@/app/actions";
+import { Suspense } from "react";
 
-export default async function Home() {
-  
+// 确保页面每次请求都重新生成
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export default async function Home({ searchParams }) {
+
+  const keyword = searchParams?.keyword || searchParams?.q || "";
+  const lat = searchParams?.lat ? parseFloat(searchParams.lat) : null;
+  const long = searchParams?.long ? parseFloat(searchParams.long) : null;
+  const distance = searchParams?.distance ? parseInt(searchParams.distance) : 10000;
+  const { data: crapItems = [], error } = await getAllCrapItems({
+    keyword,
+    lat,
+    long,
+    distance
+  });
+
   return (
-    <main className="flex min-h-screen flex-col items-center py-12">
-      <section className="mt-12 w-full flex justify-center">
-        <div className="px-24">
-          <form className="w-[1/2] mx-auto flex flex-col" action={handleSearch}>
-            <div className="mb-6">
-              <label className="block mb-2 text-md font-medium text-primary-dark dark">Search for some Crap</label>
-              <input placeholder="keyword" type="text" name="keyword" className="bg-white border border-primary-dark text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-              <p className="text-sm text-purple-700 font-bold">Leave form blank to match everything within the indicated distance.</p>
-            </div>
-            <label className="block mb-2 text-md font-medium text-primary-dark ">Select an option</label>
-            <select defaultValue="30000" name="distance" className="bg-white border border-primary-dark text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-              <option value="10000">10km</option>
-              <option value="30000">30km</option>
-              <option value="50000">50km</option>
-            </select>
-            <button type="submit" className="mt-6 text-white bg-primary-dark hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-4 py-2">Search</button>
-          </form>
-          
-      
-        </div>
-      </section>
-    </main>
+    <section className="flex flex-col items-center py-12 px-3 md:px-3">
+      <h1 className="text-3xl font-bold text-primary-dark mb-6 text-center">Find Free Items</h1>
+
+      <CrapSearch
+        defaultKeyword={keyword}
+        defaultLat={lat}
+        defaultLong={long}
+        defaultDistance={distance}
+      />
+
+      <div className="w-full max-w-6xl px-4 md:px-0 mt-16" suppressHydrationWarning>
+        {/* 主内容区 */}
+        <Suspense fallback={
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-dark"></div>
+          </div>
+        }>
+          <div className="w-full">
+            {error ? (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            ) : (
+              <CrapList items={crapItems || []} />
+            )}
+          </div>
+        </Suspense>
+      </div>
+    </section>
   );
 }

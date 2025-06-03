@@ -58,7 +58,7 @@ export default async function Page({ params, searchParams }) {
   const myId = token ? decodeToken(token?.value)?.payload?.id : null;
 
   return (
-    <main className="flex min-h-screen flex-col items-center py-12">
+    <section className="flex min-h-screen flex-col items-center py-12">
       <div className="w-full mt-6 px-12">
         <h2 className="text-center text-xl">There are
           <span className="font-bold mx-2">{list.length > 0 ? list.length : '0'}</span>
@@ -91,6 +91,6 @@ export default async function Page({ params, searchParams }) {
           <Login />
         </div>
       )}
-    </main>
+    </section>
   );
 }
