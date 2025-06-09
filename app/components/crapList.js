@@ -13,7 +13,7 @@ export default function CrapList({ items = [] }) {
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 			{items.map((item) => (
-				<Link href={`/detail/${item._id}`} key={item._id} className="block">
+				<Link href={`/crap/${item._id}`} key={item._id} className="block">
 					<div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col">
 						<div className="relative w-full pt-[75%]">
 							{item.images && item.images.length > 0 ? (

@@ -1,10 +1,11 @@
 'use server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 const { NEXT_PAGE_URL, NEXT_API_URL } = process.env;
 
+// TODO redirectUrl custom page
 export async function handelLogin() {
 	'use server'
 	const redirectUrl = encodeURIComponent(`${NEXT_PAGE_URL}/login`);
@@ -34,18 +35,23 @@ export async function createCrap(fd) {
 
 
 
-export async function getAllCrapItems({ keyword, lat, long, distance }) {
+export async function getAllCrapItems(params = {}) {
 	'use server'
 	try {
-		// 直接构建指向后端API的URL
+		const {
+			keyword = '',
+			lat = null,
+			long = null,
+			distance = 10000
+		} = params;
+
 		let url = `${process.env.NEXT_API_URL}/api/crap?`;
 
-		// 添加查询参数 - 注意：后端API使用'query'而不是'keyword'
 		if (keyword) {
 			url += `query=${encodeURIComponent(keyword)}&`;
 		}
 
-		if (lat && long) {
+		if (lat !== null && long !== null) {
 			url += `lat=${lat}&long=${long}&`;
 		}
 
@@ -53,12 +59,10 @@ export async function getAllCrapItems({ keyword, lat, long, distance }) {
 			url += `distance=${distance}&`;
 		}
 
-		// 移除URL末尾可能的&符号
 		url = url.replace(/&$/, '');
 
 		console.log('Calling backend API directly:', url);
 
-		// 获取token以进行认证
 		const token = await cookies().get('token');
 
 		const response = await fetch(url, {
@@ -66,7 +70,6 @@ export async function getAllCrapItems({ keyword, lat, long, distance }) {
 			headers: {
 				'Content-Type': 'application/json',
 				'Accept': 'application/json',
-				// 只有在token存在时添加认证头
 				...(token?.value && { 'Authorization': `Bearer ${token.value}` }),
 			},
 			next: { revalidate: 0 },
@@ -108,7 +111,7 @@ export async function handleDeleteCrap(id) {
 	if (!response.ok) {
 		console.log('delete failed', response.status);
 	} else {
-		redirect('/mine');
+		redirect('/');
 	}
 }
 
@@ -225,6 +228,7 @@ export async function login(response, token) {
 		secure: process.env.NODE_ENV === 'production',
 		httpOnly: true,
 		expires: expires,
+		sameSite: 'lax'
 	});
 }
 export async function logout() {
@@ -234,16 +238,24 @@ export async function logout() {
 }
 
 export async function getSession() {
-  'use server'
-  try {
-    const cookieStore = cookies();
-    const token = cookieStore?.get('token');
-    if (!token) return null;
-    return token;
-  } catch (error) {
-    console.error('Error getting session:', error);
-    return null;
-  }
+	'use server'
+	try {
+		// 使用 headers() 来获取 cookie
+		const headersList = await headers();
+		const cookieHeader = headersList.get('cookie') || '';
+
+		// 解析 cookie 字符串
+		const tokenMatch = cookieHeader.match(/token=([^;]+)/);
+		const tokenValue = tokenMatch ? tokenMatch[1] : null;
+
+		if (!tokenValue) return null;
+
+		// 返回类似 cookies().get() 的结构
+		return { name: 'token', value: tokenValue };
+	} catch (error) {
+		console.error('Error getting session:', error);
+		return null;
+	}
 }
 
 export async function updateSession(request) {

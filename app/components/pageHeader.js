@@ -45,7 +45,7 @@ export default function PageHeader() {
           <nav className="flex gap-2 md:gap-3">
             <LinkButton title="Search" linkUrl="/" />
             <LinkButton title="Post" linkUrl="/post" />
-            <LinkButton title="My Crap" linkUrl="/mine" />
+            <LinkButton title="Mine" linkUrl="/mine" />
             <LinkButton title="Wiped" linkUrl="/wiped" />
           </nav>
         </div>

@@ -3,8 +3,6 @@ import CrapSearch from "@/app/components/crapSearch";
 import { getAllCrapItems } from "@/app/actions";
 import { Suspense } from "react";
 
-// 确保页面每次请求都重新生成
-export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home({ searchParams }) {
@@ -32,7 +30,6 @@ export default async function Home({ searchParams }) {
       />
 
       <div className="w-full max-w-6xl px-4 md:px-0 mt-16" suppressHydrationWarning>
-        {/* 主内容区 */}
         <Suspense fallback={
           <div className="flex justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-dark"></div>

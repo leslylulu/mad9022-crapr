@@ -20,7 +20,6 @@ export default function CrapSearch({
 	});
 	const [isLoading, setIsLoading] = useState(false);
 
-	// 获取用户位置
 	useEffect(() => {
 		if (navigator.geolocation && !location.lat && !location.long) {
 			navigator.geolocation.getCurrentPosition(
@@ -45,7 +44,6 @@ export default function CrapSearch({
 		if (e) e.preventDefault();
 		setIsLoading(true);
 
-		// 构建搜索参数
 		const searchParams = new URLSearchParams();
 
 		if (keyword) {
@@ -63,15 +61,12 @@ export default function CrapSearch({
 
 		router.push(`/?${searchParams.toString()}`);
 
-		router.refresh();
-		// 重置加载状态
 		setIsLoading(false);
 	};
 
 
 	return (
 		<>
-			{/* 搜索栏和过滤器UI */}
 			<div className="max-w-6xl mx-auto flex items-center w-full">
 				<form onSubmit={handleSearchSubmit} className="flex-1 mr-2">
 					<div className="relative">
@@ -103,7 +98,6 @@ export default function CrapSearch({
 				</button>
 			</div>
 
-			{/* 过滤器抽屉 */}
 			<aside className={`
         md:w-80 bg-white p-6 rounded-lg shadow-md 
         fixed right-0 top-16 h-screen md:h-auto z-20 

@@ -17,7 +17,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
+      <body suppressHydrationWarning className={poppins.className}>
         <PageHeader />
         <main className="pt-40 pb-12">
           {children}
