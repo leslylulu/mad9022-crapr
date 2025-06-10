@@ -11,7 +11,6 @@ export default function CreateForm() {
 	const [locationStatus, setLocationStatus] = useState('');
 	const fileInputRef = useRef(null);
 
-	// Get user location when component mounts
 	useEffect(() => {
 		if (navigator.geolocation) {
 			setLocationStatus('Fetching location...');
@@ -38,7 +37,6 @@ export default function CreateForm() {
 		e.preventDefault();
 		const fd = new FormData(e.target);
 
-		// Add location data to form data
 		if (location.latitude && location.longitude) {
 			fd.append('lat', location.latitude);
 			fd.append('long', location.longitude);
@@ -62,7 +60,6 @@ export default function CreateForm() {
 		const newPreviewImages = [];
 
 		Array.from(files).forEach(file => {
-			// Only process image files
 			if (!file.type.match('image.*')) return;
 
 			const reader = new FileReader();
@@ -136,7 +133,6 @@ export default function CreateForm() {
 					/>
 				</div>
 
-				{/* Location Status */}
 				<div className="mb-5">
 					<div className="flex items-center justify-between">
 						<label className="block mb-2 text-md font-medium text-primary-dark">Location</label>

@@ -8,7 +8,7 @@ const { NEXT_PAGE_URL, NEXT_API_URL } = process.env;
 // TODO redirectUrl custom page
 export async function handelLogin() {
 	'use server'
-	const redirectUrl = encodeURIComponent(`${NEXT_PAGE_URL}/login`);
+	const redirectUrl = encodeURIComponent(`${NEXT_PAGE_URL}/crap`);
 	const url = `${NEXT_API_URL}/auth/google?redirect_url=${redirectUrl}`;
 	redirect(url);
 }
@@ -29,10 +29,9 @@ export async function createCrap(fd) {
 		console.log('create failed', response.ok);
 		return { status: response.status, message: "Failed Create Crap" }
 	} else {
-		// redirect('/mine');
+		redirect('/mine');
 	}
 }
-
 
 
 export async function getAllCrapItems(params = {}) {
@@ -61,9 +60,7 @@ export async function getAllCrapItems(params = {}) {
 
 		url = url.replace(/&$/, '');
 
-		console.log('Calling backend API directly:', url);
-
-		const token = await cookies().get('token');
+		const token = await cookies()?.get('token');
 
 		const response = await fetch(url, {
 			method: 'GET',
@@ -219,18 +216,45 @@ export async function suggestLocation(id, address, date, time) {
 }
 
 
+// export async function login(response, token) {
+// 	//set the cookie
+// 	'use server'
+// 	const expires = new Date(Date.now() + 60 * 60 * 12 * 1000); //30 seconds expiry for the token cookie
+// 	await response.cookies?.set('token', token, {
+// 		path: '/',
+// 		secure: process.env.NODE_ENV === 'production',
+// 		httpOnly: true,
+// 		expires: expires,
+// 		sameSite: 'lax'
+// 	});
+// }
+
 export async function login(response, token) {
-	//set the cookie
 	'use server'
-	const expires = new Date(Date.now() + 60 * 60 * 12 * 1000); //30 seconds expiry for the token cookie
-	await response.cookies.set('token', token, {
-		path: '/',
-		secure: process.env.NODE_ENV === 'production',
-		httpOnly: true,
-		expires: expires,
-		sameSite: 'lax'
-	});
+	// Check if response is defined and has cookies method
+	if (response && typeof response.cookies?.set === 'function') {
+		const expires = new Date(Date.now() + 60 * 60 * 12 * 1000); // 12 hours expiry
+		await response.cookies.set('token', token, {
+			path: '/',
+			secure: process.env.NODE_ENV === 'production',
+			httpOnly: true,
+			expires: expires,
+			sameSite: 'lax'
+		});
+	} else {
+		// If response doesn't have cookies, use the cookies() function directly
+		const cookieStore = cookies();
+		const expires = new Date(Date.now() + 60 * 60 * 12 * 1000); // 12 hours expiry
+		await cookieStore.set('token', token, {
+			path: '/',
+			secure: process.env.NODE_ENV === 'production',
+			httpOnly: true,
+			expires: expires,
+			sameSite: 'lax'
+		});
+	}
 }
+
 export async function logout() {
 	'use server'
 	await cookies().set('token', '', { expires: new Date(0) });

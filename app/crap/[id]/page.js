@@ -18,7 +18,7 @@ const FLUSHED = 'FLUSHED';
 
 const Page = async ({ params }) => {
 	cookies();
-	const { id } = params;
+	const { id } = await params;
 	const token = await getSession();
 	const response = await fetch(`${NEXT_API_URL}/api/crap/${id}?`, {
 		method: 'GET',
@@ -52,7 +52,7 @@ const Page = async ({ params }) => {
 	const localDate = date ? date.toLocaleDateString() : '';
 
 	return (
-		<div className="container">
+		<section className="container min-h-screen flex flex-col justify-center items-center">
 			{
 				isOwner && <h1 className="my-3">
 					{
@@ -161,7 +161,7 @@ const Page = async ({ params }) => {
 
 				</div>
 			}
-		</div>
+		</section>
 	)
 }
 

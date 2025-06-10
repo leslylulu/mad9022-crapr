@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body suppressHydrationWarning className={poppins.className}>
         <PageHeader />
-        <main className="pt-40 pb-12">
+        <main className="py-3">
           {children}
         </main>
       </body>

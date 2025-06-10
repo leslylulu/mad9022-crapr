@@ -15,7 +15,7 @@ export default async function Page() {
   const result = await response.json();
   const flushedList = result.data?.filter((item) => item.status === "FLUSHED");
   return (
-    <div className="container">
+    <div className="container min-h-screen flex flex-col justify-center items-center">
       <h2 className="my-6">
         These are pieces of crap that you have posted and managed to get rid of.
       </h2>
