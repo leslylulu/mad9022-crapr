@@ -19,7 +19,7 @@ export default async function Page({ searchParams }) {
   });
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center py-12 px-3 md:px-3">
+    <section className="min-h-screen flex flex-col items-center justify-center py-24 px-3 md:px-3">
       <h1 className="text-3xl font-bold text-primary-dark mb-6 text-center">Find Free Items</h1>
 
       <CrapSearch

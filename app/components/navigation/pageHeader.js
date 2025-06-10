@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import LinkButton from "@/app/components/linkButton";
+import LinkButton from "@/app/components/navigation/linkButton";
 
 export default function PageHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -47,6 +47,7 @@ export default function PageHeader() {
             <LinkButton title="Post" linkUrl="/post" />
             <LinkButton title="Mine" linkUrl="/mine" />
             <LinkButton title="Wiped" linkUrl="/wiped" />
+            {/* TODO add user avatar and name */}
           </nav>
         </div>
       </div>

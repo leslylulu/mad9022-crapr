@@ -1,5 +1,5 @@
 import { Poppins } from "next/font/google";
-import PageHeader from "@/app/components/pageHeader";
+import PageHeader from "@/app/components/navigation/pageHeader";
 import "./globals.css";
 import "./globalicons.css";
 
